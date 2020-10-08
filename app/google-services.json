@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "172984903501",
+    "firebase_url": "https://gym-management-d98ff.firebaseio.com",
+    "project_id": "gym-management-d98ff",
+    "storage_bucket": "gym-management-d98ff.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:172984903501:android:a370f16310065b9f72b904",
+        "android_client_info": {
+          "package_name": "com.example.gymmanagement"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "172984903501-gtosj4ke3vupqq5hs0amsk491rmr5h8v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAYHOXn6UVfD-sh3Zj6yCFot9of1qBpJ_4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "172984903501-gtosj4ke3vupqq5hs0amsk491rmr5h8v.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

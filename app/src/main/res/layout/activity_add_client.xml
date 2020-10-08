@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".add_client">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/add_client_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:titleTextColor="#fff"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        android:background="#2C91FD"
+        app:title="Add Client"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="125dp"
+                android:layout_height="125dp"
+                android:layout_marginTop="30dp"
+                android:layout_gravity="center">
+
+                <ImageView
+                    android:id="@+id/client_DP"
+                    android:layout_width="125dp"
+                    android:layout_height="125dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/default_photo"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ProgressBar
+                    android:id="@+id/add_c_progress_bar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toBottomOf="@+id/client_DP"
+                    app:layout_constraintEnd_toEndOf="@+id/client_DP"
+                    app:layout_constraintStart_toStartOf="@+id/client_DP"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:visibility="gone"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tap above to add your photo"
+                android:layout_gravity="center"
+                android:textColor="#2C91FD"/>
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginHorizontal="55dp"
+                android:layout_marginTop="40dp"
+                android:hint="Name">
+                <EditText
+                    android:id="@+id/edt_client_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginHorizontal="55dp"
+                android:layout_marginTop="5dp"
+                android:hint="Phone No.">
+                <EditText
+                    android:id="@+id/edt_client_phone"
+                    android:layout_width="match_parent"
+                    android:maxLength="10"
+                    android:inputType="phone"
+                    android:layout_height="wrap_content" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginHorizontal="55dp"
+                android:layout_marginTop="5dp"
+                android:hint="Email Address">
+                <EditText
+                    android:id="@+id/edt_client_email"
+                    android:layout_width="match_parent"
+                    android:inputType="textEmailAddress"
+                    android:layout_height="40dp"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.toptoche.searchablespinnerlibrary.SearchableSpinner
+
+                android:id="@+id/spinner_client_plan"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="55dp"
+                android:layout_marginTop="5dp">
+            </com.toptoche.searchablespinnerlibrary.SearchableSpinner>
+
+            <TableRow
+                android:id="@+id/table_row"
+                android:layout_width="match_parent"
+                android:layout_height="0.95dp"
+                android:layout_marginHorizontal="55dp"
+                android:layout_marginTop="-6dp"
+                android:background="#444"/>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="5dp"
+                android:layout_marginHorizontal="55dp"
+                android:hint="Join Date">
+                <EditText
+                    android:id="@+id/edt_client_join_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:focusable="false"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginHorizontal="55dp"
+                android:layout_marginTop="5dp"
+                android:hint="Due Date">
+                <EditText
+                    android:id="@+id/edt_client_due_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:focusable="false"
+                    android:enabled="false"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginHorizontal="55dp"
+                android:layout_marginTop="5dp"
+                android:hint="Amount">
+                <EditText
+                    android:id="@+id/edt_client_amount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginHorizontal="55dp"
+                android:layout_marginTop="5dp"
+                android:hint="Paid Amount">
+                <EditText
+                    android:id="@+id/edt_client_amtpaid"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginHorizontal="55dp"
+                android:layout_marginTop="5dp"
+                android:hint="Due Amount">
+                <EditText
+                    android:id="@+id/edt_client_amtdue"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:enabled="false"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <ProgressBar
+                android:id="@+id/client_progress_bar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="50dp"
+                android:layout_gravity="center"
+                android:visibility="gone"/>
+
+            <Button
+                android:id="@+id/btn_client_save"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#2C91FD"
+                android:layout_gravity="center"
+                android:text="Add"
+                android:textColor="#fff"
+                android:layout_marginTop="40dp"
+                android:layout_marginBottom="30dp"/>
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
