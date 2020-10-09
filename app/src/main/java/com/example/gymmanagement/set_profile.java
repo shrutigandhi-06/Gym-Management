@@ -36,14 +36,10 @@ import java.util.Map;
 
 public class set_profile extends AppCompatActivity {
 
-    //private static final int CHOOSE_IMAGE = 101;
-
     ProgressBar progressBar;
-    EditText set_name,set_phone,set_address,set_blood_grp;
+    EditText set_name,set_phone;
     Button button;
     ImageView imageView, default_img;
-    //Uri uriProfile_image;
-    //String profile_imageURL;
 
     FirebaseFirestore firebaseFirestore;
     DocumentReference documentReference;
@@ -67,8 +63,6 @@ public class set_profile extends AppCompatActivity {
         set_name = findViewById(R.id.edt_reg_name);
         set_phone = findViewById(R.id.edt_reg_phone);
         default_img = findViewById(R.id.img_default);
-        //set_address = findViewById(R.id.edt_reg_address);
-        //set_blood_grp = findViewById(R.id.edt_reg_bloodgrp);
         button = findViewById(R.id.btn_reg_done);
         progressBar = findViewById(R.id.progress_bar);
 
@@ -87,23 +81,12 @@ public class set_profile extends AppCompatActivity {
                 saveUserData();
             }
         });
-
-
-        /*imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                showImageChooser();
-            }
-        });*/
     }
 
     private void saveUserData() {
 
         final String name = set_name.getText().toString();
         String phone = set_phone.getText().toString();
-        //String address = set_address.getText().toString();
-        //String blood_grp = set_blood_grp.getText().toString();
 
         if(progressBar.getVisibility()==View.GONE)
             progressBar.setVisibility(View.VISIBLE);
@@ -122,42 +105,6 @@ public class set_profile extends AppCompatActivity {
             set_phone.requestFocus();
             return;
         }
-        /*if(address.isEmpty())
-        {
-            progressBar.setVisibility(View.GONE);
-            set_address.setError("Address is required");
-            set_address.requestFocus();
-            return;
-        }
-        if(blood_grp.isEmpty())
-        {
-            progressBar.setVisibility(View.GONE);
-            set_blood_grp.setError("Blood group is required");
-            set_blood_grp.requestFocus();
-            return;
-        }*/
-
-        //FirebaseUser firebaseUser = mAuth.getCurrentUser();
-
-        //if(firebaseUser!=null /*&& profile_imageURL!=null*/)
-        /*{
-
-            UserProfileChangeRequest profile = new UserProfileChangeRequest.Builder().setDisplayName(name).build();//.setPhotoUri(Uri.parse(profile_imageURL)).build();
-            firebaseUser.updateProfile(profile).addOnCompleteListener(new OnCompleteListener<Void>() {
-                @Override
-                public void onComplete(@NonNull Task<Void> task) {
-                    if(task.isSuccessful())
-                    {
-                        Toast toast = Toast.makeText(set_profile.this, "You're good to go!!!",Toast.LENGTH_SHORT);
-                        toast.show();
-
-                        finish();
-                        Intent intent = new Intent(set_profile.this, demo.class);
-                        startActivity(intent);
-                    }
-                }
-            });
-        }*/
 
         //setting up account
 
@@ -179,8 +126,6 @@ public class set_profile extends AppCompatActivity {
                         Map<String, Object> save_trainer_data = new HashMap<>();
                         save_trainer_data.put("name", set_name.getText().toString());
                         save_trainer_data.put("phone", set_phone.getText().toString());
-                        //save_trainer_data.put("address", set_address.getText().toString());
-                        //save_trainer_data.put("blood_grp", set_blood_grp.getText().toString());
                         save_trainer_data.put("email", set_email);
 
                         documentReference.set(save_trainer_data).addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -255,55 +200,4 @@ public class set_profile extends AppCompatActivity {
         });
         //end here
     }
-
-    /*@Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if(requestCode==CHOOSE_IMAGE && resultCode==RESULT_OK && data!=null && data.getData()!=null)
-        {
-            uriProfile_image = data.getData();
-            try {
-
-                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(),uriProfile_image);
-                    imageView.setImageBitmap(bitmap);
-                    uploadImage();
-            } catch (IOException e) {
-
-                    e.printStackTrace();
-            }
-        }
-    }
-
-    private void uploadImage() {
-
-        final StorageReference profile_imageREF = FirebaseStorage.getInstance().getReference("profilePics/"+System.currentTimeMillis()+".jpg");
-
-        if(uriProfile_image!=null)
-        {
-            profile_imageREF.putFile(uriProfile_image).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-
-                    profile_imageURL = profile_imageREF.getDownloadUrl().toString();
-
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-
-                    Toast toast = Toast.makeText(set_profile.this,e.getMessage(),Toast.LENGTH_SHORT);
-                    toast.show();
-                }
-            });
-        }
-    }
-
-    private void showImageChooser() {
-
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent,"Select profile image"),CHOOSE_IMAGE);
-    }*/
 }

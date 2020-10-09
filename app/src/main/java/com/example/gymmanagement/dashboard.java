@@ -7,11 +7,28 @@ import androidx.appcompat.widget.Toolbar;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.ArrayList;
 
 public class dashboard extends AppCompatActivity {
 
-    TextView total_clients, client_membership_expiring;
+    FirebaseFirestore firebaseFirestore;
+    FirebaseAuth mAuth;
+
+    ArrayList<String> clients;
+    String no_total_clients;
+    ProgressBar progress_client;
+    TextView total_clients;
 
     Toolbar toolbar;
 
@@ -20,13 +37,39 @@ public class dashboard extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
 
+        firebaseFirestore = FirebaseFirestore.getInstance();
+        mAuth = FirebaseAuth.getInstance();
+
+        progress_client = findViewById(R.id.progress_client);
+        total_clients = findViewById(R.id.total_clients);
+
+        progress_client.setVisibility(View.VISIBLE);
+        total_clients.setVisibility(View.GONE);
+
         toolbar = findViewById(R.id.dashboard_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        total_clients = findViewById(R.id.dashboard_total_clients);
-        client_membership_expiring = findViewById(R.id.dashboard_client_membership_expiring);
+        clients = new ArrayList<>();
+
+        firebaseFirestore.collection(mAuth.getUid()).document("user info").collection("clients").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if(task.isSuccessful())
+                {
+                    for(QueryDocumentSnapshot documentSnapshot:task.getResult())
+                    {
+                        documentSnapshot.getData();
+                        clients.add(documentSnapshot.get("name")+"");
+                    }
+                    progress_client.setVisibility(View.GONE);
+                    total_clients.setVisibility(View.VISIBLE);
+                    no_total_clients = "(" + (clients.size()) + ")";
+                    total_clients.setText(no_total_clients);
+                }
+            }
+        });
     }
 
     @Override

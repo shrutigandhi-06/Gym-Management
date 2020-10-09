@@ -182,7 +182,7 @@ public class edit_trainer extends AppCompatActivity {
 
         String name = edit_name.getText().toString();
         String phone = edit_phone.getText().toString();
-        String email = edit_email.getText().toString();
+        String email = edit_email.getText().toString().trim();
         String address = edit_address.getText().toString();
         String blood_grp = edit_blood_grp.getText().toString();
 
@@ -200,6 +200,13 @@ public class edit_trainer extends AppCompatActivity {
         {
             progressBar.setVisibility(View.GONE);
             edit_phone.setError("Phone number is required");
+            edit_phone.requestFocus();
+            return;
+        }
+        if(phone.length()<10)
+        {
+            progressBar.setVisibility(View.GONE);
+            edit_phone.setError("Invalid contact number");
             edit_phone.requestFocus();
             return;
         }
@@ -257,7 +264,7 @@ public class edit_trainer extends AppCompatActivity {
         save_trainer_changes.put("phone",edit_phone.getText().toString());
         save_trainer_changes.put("address",edit_address.getText().toString());
         save_trainer_changes.put("blood_grp",edit_blood_grp.getText().toString());
-        save_trainer_changes.put("email",edit_email.getText().toString());
+        save_trainer_changes.put("email",edit_email.getText().toString().trim());
         if(profile_imageURL!=null)
         {
             StorageReference storageReference = FirebaseStorage.getInstance().getReferenceFromUrl(t_uri);

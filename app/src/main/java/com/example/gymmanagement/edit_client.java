@@ -249,7 +249,7 @@ public class edit_client extends AppCompatActivity {
             email.requestFocus();
             return;
         }
-        if(!Patterns.EMAIL_ADDRESS.matcher(email.getText().toString()).matches())
+        if(!Patterns.EMAIL_ADDRESS.matcher(email.getText().toString().trim()).matches())
         {
             progressBar.setVisibility(View.GONE);
             email.setError("Invalid email address");
@@ -293,7 +293,7 @@ public class edit_client extends AppCompatActivity {
         HashMap<String, Object> save_client_changes = new HashMap<>();
         save_client_changes.put("name", c_name.toLowerCase());
         save_client_changes.put("phone", phone.getText().toString());
-        save_client_changes.put("email", email.getText().toString());
+        save_client_changes.put("email", email.getText().toString().trim());
         save_client_changes.put("plan", plan.getText().toString());
         save_client_changes.put("amount", amount.getText().toString());
         save_client_changes.put("join_date", join_date.getText().toString());

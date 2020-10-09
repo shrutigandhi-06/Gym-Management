@@ -6,6 +6,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
+
         tools:context=".after_login">
 
     <LinearLayout
@@ -20,6 +21,15 @@
             android:layout_height="150dp"
             android:src="@drawable/the_central_icon"
             android:layout_marginBottom="50dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Input Session Entry"
+            android:gravity="center"
+            android:textSize="27sp"
+            android:textColor="#fff"
+            android:textStyle="bold"/>
 
         <com.toptoche.searchablespinnerlibrary.SearchableSpinner
             android:id="@+id/spinner_client_name"

@@ -7,6 +7,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -14,10 +15,13 @@ import android.util.Log;
 import android.util.Patterns;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -32,19 +36,25 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.toptoche.searchablespinnerlibrary.SearchableSpinner;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public class add_trainer extends AppCompatActivity {
 
     ProgressBar progressBar,add_dp_progressbar;
-    EditText add_name,add_phone,add_address,add_blood_grp,add_email;
+    EditText add_name,add_phone,add_address,add_email;
     Button trainer_add;
     FirebaseFirestore firebaseFirestore;
     DocumentReference documentReference;
     FirebaseAuth mAuth;
+
+    SearchableSpinner spinner_blood_grp;
+    ArrayList<String> blood_groups;
+    String t_blood_grp;
 
     ImageView imageView;
     Uri uriProfile_image;
@@ -73,7 +83,8 @@ public class add_trainer extends AppCompatActivity {
         add_phone = findViewById(R.id.edt_add_phone);
         add_email = findViewById(R.id.edt_add_email);
         add_address = findViewById(R.id.edt_add_address);
-        add_blood_grp = findViewById(R.id.edt_add_bloodgrp);
+        //add_blood_grp = findViewById(R.id.edt_add_bloodgrp);
+        spinner_blood_grp = findViewById(R.id.spinner_blood_grp);
         trainer_add = findViewById(R.id.btn_trainer_save);
         progressBar = findViewById(R.id.progress_bar);
         add_dp_progressbar = findViewById(R.id.add_t_progress_bar);
@@ -89,6 +100,30 @@ public class add_trainer extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
         firebaseFirestore = FirebaseFirestore.getInstance();
+
+        blood_groups = new ArrayList<>();
+        blood_groups.add("Select Blood Group");
+        blood_groups.add("B+");
+        blood_groups.add("B-");
+        blood_groups.add("O+");
+        blood_groups.add("O-");
+        blood_groups.add("A+");
+        blood_groups.add("A-");
+        blood_groups.add("AB+");
+        blood_groups.add("AB-");
+
+        spinner_blood_grp.setAdapter(new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, blood_groups));
+        spinner_blood_grp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+                t_blood_grp = adapterView.getItemAtPosition(position).toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
 
         trainer_add.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -165,9 +200,9 @@ public class add_trainer extends AppCompatActivity {
 
         final String name = add_name.getText().toString();
         String phone = add_phone.getText().toString();
-        String email = add_email.getText().toString();
+        String email = add_email.getText().toString().trim();
         String address = add_address.getText().toString();
-        String blood_grp = add_blood_grp.getText().toString();
+        //String blood_grp = add_blood_grp.getText().toString();
 
         if(progressBar.getVisibility()==View.GONE)
             progressBar.setVisibility(View.VISIBLE);
@@ -186,6 +221,13 @@ public class add_trainer extends AppCompatActivity {
             add_phone.requestFocus();
             return;
         }
+        if(add_phone.getText().toString().length() < 10)
+        {
+            progressBar.setVisibility(View.GONE);
+            add_phone.setError("Invalid contact number");
+            add_phone.requestFocus();
+            return;
+        }
         if(email.isEmpty())
         {
             progressBar.setVisibility(View.GONE);
@@ -195,15 +237,9 @@ public class add_trainer extends AppCompatActivity {
         }
         if(!Patterns.EMAIL_ADDRESS.matcher(email).matches())
         {
+            progressBar.setVisibility(View.GONE);
             add_email.setError("Invalid email address");
             add_email.requestFocus();
-            return;
-        }
-        if(add_phone.getText().toString().length() < 10)
-        {
-            progressBar.setVisibility(View.GONE);
-            add_phone.setError("");
-            add_phone.requestFocus();
             return;
         }
         if(address.isEmpty())
@@ -213,11 +249,13 @@ public class add_trainer extends AppCompatActivity {
             add_address.requestFocus();
             return;
         }
-        if(blood_grp.isEmpty())
+        if(t_blood_grp.equals("Select Blood Group"))
         {
             progressBar.setVisibility(View.GONE);
-            add_blood_grp.setError("Blood group is required");
-            add_blood_grp.requestFocus();
+            TextView errorText = (TextView)spinner_blood_grp.getSelectedView();
+            errorText.setError("");
+            errorText.setTextColor(Color.RED);//just to highlight that this is an error
+            errorText.setText("Select Blood Group");
             return;
         }
 
@@ -245,8 +283,8 @@ public class add_trainer extends AppCompatActivity {
         add_trainer_data.put("name",add_name.getText().toString().toLowerCase());
         add_trainer_data.put("phone",add_phone.getText().toString());
         add_trainer_data.put("address",add_address.getText().toString());
-        add_trainer_data.put("blood_grp",add_blood_grp.getText().toString());
-        add_trainer_data.put("email",add_email.getText().toString());
+        add_trainer_data.put("blood_grp",t_blood_grp);
+        add_trainer_data.put("email",add_email.getText().toString().trim());
         if(profile_imageURL!=null)
             add_trainer_data.put("uri", profile_imageURL);
         else

@@ -1,16 +1,23 @@
 package com.example.gymmanagement;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class signUp extends AppCompatActivity implements View.OnClickListener{
@@ -69,9 +76,21 @@ public class signUp extends AppCompatActivity implements View.OnClickListener{
             signUp_email.requestFocus();
             return;
         }
+        if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
+
+            signUp_email.setError("Invalid email address");
+            signUp_email.requestFocus();
+            return;
+        }
         if(password.isEmpty()){
 
             signUp_password.setError("password is required");
+            signUp_password.requestFocus();
+            return;
+        }
+        if(password.length()<6)
+        {
+            signUp_password.setError("Minimum password length should be six");
             signUp_password.requestFocus();
             return;
         }
@@ -85,19 +104,6 @@ public class signUp extends AppCompatActivity implements View.OnClickListener{
         {
             confirm_password.setError("password doesn't match");
             confirm_password.requestFocus();
-            return;
-        }
-
-        if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
-
-            signUp_email.setError("Invalid email address");
-            signUp_email.requestFocus();
-            return;
-        }
-        if(password.length()<6){
-
-            signUp_password.setError("Minimum password length should be six");
-            signUp_password.requestFocus();
             return;
         }
 

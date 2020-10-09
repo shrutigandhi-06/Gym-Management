@@ -297,7 +297,7 @@ public class add_client extends AppCompatActivity {
 
         String c_name = edt_name.getText().toString().toLowerCase();
         String c_phone = edt_phone.getText().toString();
-        String c_email = edt_email.getText().toString();
+        String c_email = edt_email.getText().toString().trim();
         String c_amount = edt_amount.getText().toString();
         String c_amt_paid = edt_amt_paid.getText().toString();
         String c_amt_due = edt_amt_due.getText().toString();
@@ -324,7 +324,7 @@ public class add_client extends AppCompatActivity {
         if(edt_phone.getText().toString().length() < 10)
         {
             progressBar.setVisibility(View.GONE);
-            edt_phone.setError("");
+            edt_phone.setError("Invalid contact number");
             edt_phone.requestFocus();
             return;
         }
@@ -335,7 +335,7 @@ public class add_client extends AppCompatActivity {
             edt_email.requestFocus();
             return;
         }
-        if(!Patterns.EMAIL_ADDRESS.matcher(edt_email.getText().toString()).matches())
+        if(!Patterns.EMAIL_ADDRESS.matcher(edt_email.getText().toString().trim()).matches())
         {
             progressBar.setVisibility(View.GONE);
             edt_email.setError("Invalid email address");
