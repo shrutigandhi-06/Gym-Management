@@ -23,6 +23,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -146,10 +147,12 @@ public class trainer_main extends Fragment {
                         {
                             TransitionManager.beginDelayedTransition(holder.cardView, new AutoTransition());
                             holder.relativeLayout.setVisibility(View.VISIBLE);
+                            holder.trainer_buttons.setVisibility(View.VISIBLE);
                         }
                         else
                         {
                             holder.relativeLayout.setVisibility(View.GONE);
+                            holder.trainer_buttons.setVisibility(View.GONE);
                         }
                     }
                 });
@@ -220,6 +223,7 @@ public class trainer_main extends Fragment {
                                 }, 3500);
 
                                 holder.relativeLayout.setVisibility(View.GONE);
+                                holder.trainer_buttons.setVisibility(View.GONE);
                             }
                         });
                         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -243,8 +247,18 @@ public class trainer_main extends Fragment {
                         intent.putExtra("address",holder.address.getText().toString());
                         intent.putExtra("blood_grp",holder.blood_grp.getText().toString());
                         intent.putExtra("uri",model.getUri());
-                        startActivity(intent);
                         getActivity().finish();
+                        startActivity(intent);
+                    }
+                });
+
+                holder.trainer_session_info.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent s_intent = new Intent(getActivity(),trainer_session_info.class);
+                        s_intent.putExtra("trainer name", holder.name.getText().toString().toLowerCase());
+                        getActivity().finish();
+                        startActivity(s_intent);
                     }
                 });
             }
@@ -269,10 +283,11 @@ public class trainer_main extends Fragment {
     private class trainerViewHolder extends RecyclerView.ViewHolder{
 
         TextView name, phone, address, blood_grp, email;
-        Button delete,edit;
+        Button delete,edit,trainer_session_info;
         CardView cardView;
         RelativeLayout relativeLayout;
         CircularImageView img_trainer_DP;
+        GridLayout trainer_buttons;
 
         public trainerViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -287,9 +302,11 @@ public class trainer_main extends Fragment {
 
             cardView = itemView.findViewById(R.id.trainer_card_view);
             relativeLayout = itemView.findViewById(R.id.trainer_relative_layout);
+            trainer_buttons = itemView.findViewById(R.id.trainer_buttons);
 
             delete = itemView.findViewById(R.id.btn_delete);
             edit = itemView.findViewById(R.id.btn_edit);
+            trainer_session_info = itemView.findViewById(R.id.btn_trainer_sessions_info);
         }
     }
 
@@ -371,7 +388,6 @@ public class trainer_main extends Fragment {
             }
         }
 
-
         Query query = firebaseFirestore.collection(mAuth.getUid()).document("user info").collection("trainers");
         FirestoreRecyclerOptions<trainer_list> options = new FirestoreRecyclerOptions.Builder<trainer_list>().setQuery(query.orderBy("name").startAt(s.toLowerCase()).endAt(s.toLowerCase()+"\uf8ff"), trainer_list.class).build();
         adapter = new FirestoreRecyclerAdapter<trainer_list, trainerViewHolder>(options) {
@@ -407,10 +423,12 @@ public class trainer_main extends Fragment {
                         {
                             TransitionManager.beginDelayedTransition(holder.cardView, new AutoTransition());
                             holder.relativeLayout.setVisibility(View.VISIBLE);
+                            holder.trainer_buttons.setVisibility(View.VISIBLE);
                         }
                         else
                         {
                             holder.relativeLayout.setVisibility(View.GONE);
+                            holder.trainer_buttons.setVisibility(View.GONE);
                         }
                     }
                 });
@@ -481,6 +499,7 @@ public class trainer_main extends Fragment {
                                 }, 3500);
 
                                 holder.relativeLayout.setVisibility(View.GONE);
+                                holder.trainer_buttons.setVisibility(View.GONE);
                             }
                         });
                         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -508,6 +527,16 @@ public class trainer_main extends Fragment {
 
                         startActivity(intent);
                         getActivity().finish();
+                    }
+                });
+
+                holder.trainer_session_info.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent s_intent = new Intent(getActivity(),trainer_session_info.class);
+                        s_intent.putExtra("trainer name", holder.name.getText().toString().toLowerCase());
+                        getActivity().finish();
+                        startActivity(s_intent);
                     }
                 });
             }

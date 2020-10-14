@@ -101,7 +101,7 @@ public class after_login extends Fragment {
         });
 
         trainers = new ArrayList<>();
-        trainers.add("Trainer attending");
+        trainers.add("Trainer attendant");
 
         firebaseFirestore.collection(userID).document("user info").collection("trainers").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
@@ -140,14 +140,14 @@ public class after_login extends Fragment {
                 errorText.setTextColor(Color.RED);//just to highlight that this is an error
                 errorText.setText("Client name");
             }
-            if(trainer_attended.equals("Trainer attending"))
+            if(trainer_attended.equals("Trainer attendant"))
             {
                 TextView errorText = (TextView)trainer_spinner.getSelectedView();
                 errorText.setError("");
                 errorText.setTextColor(Color.RED);//just to highlight that this is an error
-                errorText.setText("Trainer attending");
+                errorText.setText("Trainer attendant");
             }
-            if(!(trainer_attended.equals("Trainer attending")) && !(client.equals("Client Name")))
+            if(!(trainer_attended.equals("Trainer attendant")) && !(client.equals("Client Name")))
             {
                 Log.d("TAG", "temp");
                 Calendar calendar = Calendar.getInstance();
@@ -177,6 +177,16 @@ public class after_login extends Fragment {
                         trainer_spinner.setSelection(0);
                     }
                 });
+
+                DocumentReference documentReference1 = firebaseFirestore.collection(userID).document("user info").collection("trainers").document(trainer_attended).collection("sessions").document(time);
+
+                HashMap<String, Object> trainer_session_data = new HashMap<>();
+                trainer_session_data.put("client_attended", client);
+                trainer_session_data.put("t_arrival_time", time);
+                trainer_session_data.put("t_arrival_date",date);
+
+                documentReference1.set(trainer_session_data);
+
             }
             }
         });
