@@ -6,10 +6,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".session_info">
+    tools:context=".trainer_session_info">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/sessions_toolbar"
+        android:id="@+id/trainer_sessions_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:title="Total Sessions"
@@ -18,7 +18,7 @@
         app:titleTextColor="#fff"/>
 
     <com.toptoche.searchablespinnerlibrary.SearchableSpinner
-        android:id="@+id/c_name_spinner"
+        android:id="@+id/t_name_spinner"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:background="#0079D6"
@@ -60,7 +60,7 @@
                 android:gravity="center"
                 android:textStyle="bold"
                 android:textColor="#fff"
-                android:text="Trainer Attended"
+                android:text="Attended Client"
                 android:textSize="15dp"/>
 
         </TableRow>
@@ -68,7 +68,7 @@
     </TableLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/session_recycler_view"
+        android:id="@+id/trainer_session_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 

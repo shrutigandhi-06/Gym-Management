@@ -187,7 +187,7 @@ public class add_client extends AppCompatActivity {
                 calendar.set(Calendar.MONTH, monthOfYear);
                 calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
 
-                String myFormat = "dd/MM/yyyy";
+                String myFormat = "dd/MM/yy";
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat(myFormat, Locale.US);
 
                 edt_join_date.setText(simpleDateFormat.format(calendar.getTime()));
@@ -199,7 +199,7 @@ public class add_client extends AppCompatActivity {
 
                 d = Integer.parseInt(date.substring(0,2));
                 m = Integer.parseInt(date.substring(3,5));
-                y = Integer.parseInt(date.substring(6,10));
+                y = Integer.parseInt(date.substring(6,8));
 
                 Log.d("TAG", date);
                 Log.d("TAG", "date: "+d);
