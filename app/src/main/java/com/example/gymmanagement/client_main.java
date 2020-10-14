@@ -24,23 +24,30 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.GridLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.mikhaellopez.circularimageview.CircularImageView;
 import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
 
 public class client_main extends Fragment {
 
@@ -52,6 +59,12 @@ public class client_main extends Fragment {
     FirebaseAuth mAuth;
     FirestoreRecyclerAdapter adapter;
     String userID;
+    static int c_cnt=0, s_c_cnt = 0;
+
+    TextView add_clients;
+    ImageView img_add_clients;
+
+    ArrayList<String> total_clients;
 
     byte flag = 0;
 
@@ -66,6 +79,23 @@ public class client_main extends Fragment {
 
         userID = mAuth.getUid();
 
+        total_clients = new ArrayList<>();
+        firebaseFirestore.collection(userID).document("user info").collection("clients").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if(task.isSuccessful())
+                {
+                    for(QueryDocumentSnapshot documentSnapshot:task.getResult())
+                    {
+                        documentSnapshot.getData();
+                        total_clients.add(documentSnapshot.get("name")+"");
+                    }
+                }
+            }
+        });
+
+        add_clients = ll.findViewById(R.id.txt_add_clients);
+        img_add_clients = ll.findViewById(R.id.img_add_clients);
         client_add = ll.findViewById(R.id.btn_client_add);
 
         client_add.setOnClickListener(new View.OnClickListener() {
@@ -81,18 +111,25 @@ public class client_main extends Fragment {
 
         FirestoreRecyclerOptions<client_list> options = new FirestoreRecyclerOptions.Builder<client_list>().setQuery(query, client_list.class).build();
 
-        adapter = new FirestoreRecyclerAdapter<client_list, clientViewHolder>(options)
-        {
+        adapter = new FirestoreRecyclerAdapter<client_list, clientViewHolder>(options) {
             @NonNull
             @Override
             public clientViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
                 View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.client_list, parent,false);
+                if(!(adapter.getItemCount()==0))
+                {
+                    add_clients.setVisibility(View.GONE);
+                    img_add_clients.setVisibility(View.GONE);
+                }
                 return new clientViewHolder(view);
             }
 
             @Override
             protected void onBindViewHolder(@NonNull final clientViewHolder holder, final int position, @NonNull final client_list model) {
+
+                c_cnt=adapter.getItemCount();
+                Log.d("TAG",c_cnt+"");
 
                 Picasso.get().load(model.getUri()).into(holder.imageView);
 
@@ -139,6 +176,7 @@ public class client_main extends Fragment {
                         public void onClick(DialogInterface dialog, int which)
                         {
 
+                            c_cnt--;
                             flag = 0;
                             firebaseFirestore.collection(mAuth.getUid()).document("user info").collection("clients").document(model.getName().toLowerCase()).delete();
 
@@ -150,9 +188,24 @@ public class client_main extends Fragment {
                                         public void onClick(View view) {
                                             Log.d("TAG", "undo");
                                             flag = 1;
+                                            c_cnt++;
                                             firebaseFirestore.collection(userID).document("user info").collection("clients").document(model.getName().toLowerCase()).set(model);
+                                            add_clients.setVisibility(View.GONE);
+                                            img_add_clients.setVisibility(View.GONE);
                                         }
                                     }).show();
+
+                            Log.d("TAG",c_cnt+"");
+                            if(c_cnt == 0)
+                            {
+                                add_clients.setVisibility(View.VISIBLE);
+                                img_add_clients.setVisibility(View.VISIBLE);
+                            }
+                            else
+                            {
+                                add_clients.setVisibility(View.GONE);
+                                img_add_clients.setVisibility(View.GONE);
+                            }
 
                             new Handler().postDelayed(new Runnable() {
                                 @Override
@@ -219,6 +272,17 @@ public class client_main extends Fragment {
             }
         };
 
+        if(c_cnt==0)
+        {
+            add_clients.setVisibility(View.VISIBLE);
+            img_add_clients.setVisibility(View.VISIBLE);
+        }
+        else
+        {
+            add_clients.setVisibility(View.GONE);
+            img_add_clients.setVisibility(View.GONE);
+        }
+
         client_recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         client_recyclerView.setAdapter(adapter);
         return ll;
@@ -270,7 +334,6 @@ public class client_main extends Fragment {
         adapter.stopListening();
     }
 
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         setHasOptionsMenu(true);
@@ -301,6 +364,41 @@ public class client_main extends Fragment {
 
     private void onClientSearch(String s) {
 
+        TextView no_clients;
+        ImageView img_no_clients;
+        no_clients = ll.findViewById(R.id.no_clients);
+        img_no_clients = ll.findViewById(R.id.img_no_clients);
+        String client;
+        boolean found=false;
+        for(int i=0; i<total_clients.size(); i++)
+        {
+            client = total_clients.get(i);
+            if(client.startsWith(s.toLowerCase()))
+                found = true;
+        }
+        if(found)
+        {
+            Log.d("TAG", "clients found");
+            no_clients.setVisibility(View.GONE);
+            img_no_clients.setVisibility(View.GONE);
+        }
+        else
+        {
+            if(c_cnt==0)
+            {
+                add_clients.setVisibility(View.VISIBLE);
+                img_add_clients.setVisibility(View.VISIBLE);
+            }
+            else
+            {
+                Log.d("TAG", "no clients found");
+                no_clients.setVisibility(View.VISIBLE);
+                img_no_clients.setVisibility(View.VISIBLE);
+            }
+
+        }
+
+
         Query query = firebaseFirestore.collection(userID).document("user info").collection("clients");
         FirestoreRecyclerOptions<client_list> options = new FirestoreRecyclerOptions.Builder<client_list>().setQuery(query.orderBy("name").startAt(s.toLowerCase()).endAt(s.toLowerCase()+"\uf8ff"), client_list.class).build();
 
@@ -310,11 +408,16 @@ public class client_main extends Fragment {
             public clientViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
                 View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.client_list, parent,false);
+                /*if(!(adapter.getItemCount()==0))
+                    add_clients.setVisibility(View.GONE);*/
                 return new clientViewHolder(view);
             }
 
             @Override
             protected void onBindViewHolder(@NonNull final clientViewHolder holder, int position, @NonNull final client_list model) {
+
+                s_c_cnt=adapter.getItemCount();
+                Log.d("TAG",s_c_cnt+"");
 
                 Picasso.get().load(model.getUri()).into(holder.imageView);
 
@@ -360,6 +463,8 @@ public class client_main extends Fragment {
                             @Override
                             public void onClick(DialogInterface dialog, int which)
                             {
+
+                                s_c_cnt--;
                                 flag = 0;
                                 firebaseFirestore.collection(mAuth.getUid()).document("user info").collection("clients").document(model.getName().toLowerCase()).delete();
 
@@ -371,9 +476,24 @@ public class client_main extends Fragment {
                                             public void onClick(View view) {
                                                 Log.d("TAG", "undo");
                                                 flag = 1;
+                                                s_c_cnt++;
+                                                add_clients.setVisibility(View.GONE);
+                                                img_add_clients.setVisibility(View.GONE);
                                                 firebaseFirestore.collection(userID).document("user info").collection("clients").document(model.getName().toLowerCase()).set(model);
                                             }
                                         }).show();
+
+                                Log.d("TAG",s_c_cnt+"");
+                                if(s_c_cnt == 0)
+                                {
+                                    add_clients.setVisibility(View.VISIBLE);
+                                    img_add_clients.setVisibility(View.VISIBLE);
+                                }
+                                else
+                                {
+                                    add_clients.setVisibility(View.GONE);
+                                    img_add_clients.setVisibility(View.GONE);
+                                }
 
                                 new Handler().postDelayed(new Runnable() {
                                     @Override

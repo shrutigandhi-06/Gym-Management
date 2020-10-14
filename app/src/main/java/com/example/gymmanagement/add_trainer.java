@@ -33,6 +33,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -53,7 +55,7 @@ public class add_trainer extends AppCompatActivity {
     FirebaseAuth mAuth;
 
     SearchableSpinner spinner_blood_grp;
-    ArrayList<String> blood_groups;
+    ArrayList<String> blood_groups, trainers;
     String t_blood_grp;
 
     ImageView imageView;
@@ -98,8 +100,22 @@ public class add_trainer extends AppCompatActivity {
         });
 
         mAuth = FirebaseAuth.getInstance();
-
         firebaseFirestore = FirebaseFirestore.getInstance();
+
+        trainers = new ArrayList<>();
+        firebaseFirestore.collection(mAuth.getUid()).document("user info").collection("trainers").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if(task.isSuccessful())
+                {
+                    for(QueryDocumentSnapshot documentSnapshot:task.getResult())
+                    {
+                        documentSnapshot.getData();
+                        trainers.add(documentSnapshot.get("name")+"");
+                    }
+                }
+            }
+        });
 
         blood_groups = new ArrayList<>();
         blood_groups.add("Select Blood Group");
@@ -202,6 +218,7 @@ public class add_trainer extends AppCompatActivity {
         String phone = add_phone.getText().toString();
         String email = add_email.getText().toString().trim();
         String address = add_address.getText().toString();
+        boolean trainer_collision = false;
         //String blood_grp = add_blood_grp.getText().toString();
 
         if(progressBar.getVisibility()==View.GONE)
@@ -214,6 +231,29 @@ public class add_trainer extends AppCompatActivity {
             add_name.requestFocus();
             return;
         }
+        try
+        {
+            for(int i=0;i<trainers.size();i++)
+            {
+                String t_names = trainers.get(i);
+                if(add_name.getText().toString().toLowerCase().equals(t_names))
+                {
+                    trainer_collision = true;
+                }
+            }
+            if(trainer_collision)
+            {
+                progressBar.setVisibility(View.GONE);
+                add_name.setError("Trainer already exists");
+                add_name.requestFocus();
+                return;
+            }
+        }
+        catch (Exception e)
+        {
+
+        }
+
         if(phone.isEmpty())
         {
             progressBar.setVisibility(View.GONE);

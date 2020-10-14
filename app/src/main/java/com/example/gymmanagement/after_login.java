@@ -74,7 +74,7 @@ public class after_login extends Fragment {
         clients = new ArrayList<>();
         clients.add("Client Name");
 
-        /*firebaseFirestore.collection(userID).document("user info").collection("clients").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        firebaseFirestore.collection(userID).document("user info").collection("clients").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
             if(task.isSuccessful())
@@ -84,13 +84,9 @@ public class after_login extends Fragment {
                     documentSnapshot.getData();
                     clients.add(documentSnapshot.get("name")+"");
                 }
-                progress_client.setVisibility(View.GONE);
-                total_clients.setVisibility(View.VISIBLE);
-                no_total_clients = "(" + (clients.size() - 1) + ")";
-                total_clients.setText(no_total_clients);
             }
             }
-        });*/
+        });
 
         client_spinner.setAdapter(new ArrayAdapter<>(getActivity().getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, clients));
         client_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -151,7 +147,6 @@ public class after_login extends Fragment {
                 errorText.setTextColor(Color.RED);//just to highlight that this is an error
                 errorText.setText("Trainer attending");
             }
-
             if(!(trainer_attended.equals("Trainer attending")) && !(client.equals("Client Name")))
             {
                 Log.d("TAG", "temp");

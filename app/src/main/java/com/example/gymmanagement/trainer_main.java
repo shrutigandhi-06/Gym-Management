@@ -23,22 +23,31 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.mikhaellopez.circularimageview.CircularImageView;
 import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
+
+import static com.example.gymmanagement.client_main.c_cnt;
 
 public class trainer_main extends Fragment {
 
@@ -50,6 +59,12 @@ public class trainer_main extends Fragment {
     RecyclerView recyclerView;
     FloatingActionButton add;
 
+    TextView add_trainers;
+    ImageView img_add_trainers;
+    ArrayList<String> total_trainers;
+
+    static int t_cnt = 0, s_t_cnt = 0;
+
     byte flag = 0;
 
     @Override
@@ -59,6 +74,25 @@ public class trainer_main extends Fragment {
 
         firebaseFirestore = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
+
+        total_trainers = new ArrayList<>();
+        firebaseFirestore.collection(mAuth.getUid()).document("user info").collection("trainers").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if(task.isSuccessful())
+                {
+                    for(QueryDocumentSnapshot documentSnapshot:task.getResult())
+                    {
+                        documentSnapshot.getData();
+                        total_trainers.add(documentSnapshot.get("name")+"");
+                    }
+                }
+            }
+        });
+
+
+        add_trainers = ll.findViewById(R.id.txt_add_trainers);
+        img_add_trainers = ll.findViewById(R.id.img_add_trainers);
 
         recyclerView = ll.findViewById(R.id.trainer_recycler_view);
         add = ll.findViewById(R.id.btn_trainer_add);
@@ -82,11 +116,19 @@ public class trainer_main extends Fragment {
             public trainerViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
                 View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.trainer_list, parent, false);
+                if(!(adapter.getItemCount()==0))
+                {
+                    add_trainers.setVisibility(View.GONE);
+                    img_add_trainers.setVisibility(View.GONE);
+                }
                 return new trainerViewHolder(view);
             }
 
             @Override
             protected void onBindViewHolder(@NonNull final trainerViewHolder holder, int position, @NonNull final trainer_list model) {
+
+                t_cnt=adapter.getItemCount();
+                Log.d("TAG",t_cnt+"");
 
                 Picasso.get().load(model.getUri()).into(holder.img_trainer_DP);
 
@@ -127,6 +169,7 @@ public class trainer_main extends Fragment {
                             public void onClick(DialogInterface dialog, int which)
                             {
 
+                                t_cnt--;
                                 flag = 0;
                                 firebaseFirestore.collection(mAuth.getUid()).document("user info").collection("trainers").document(model.getName().toLowerCase()).delete();
 
@@ -138,9 +181,24 @@ public class trainer_main extends Fragment {
                                         public void onClick(View view) {
                                             Log.d("TAG", "undo");
                                             flag = 1;
+                                            t_cnt++;
+                                            add_trainers.setVisibility(View.GONE);
+                                            img_add_trainers.setVisibility(View.GONE);
                                             firebaseFirestore.collection(userID).document("user info").collection("trainers").document(model.getName().toLowerCase()).set(model);
                                         }
                                     }).show();
+
+                                Log.d("TAG",t_cnt+"");
+                                if(t_cnt == 0)
+                                {
+                                    add_trainers.setVisibility(View.VISIBLE);
+                                    img_add_trainers.setVisibility(View.VISIBLE);
+                                }
+                                else
+                                {
+                                    add_trainers.setVisibility(View.GONE);
+                                    img_add_trainers.setVisibility(View.GONE);
+                                }
 
                                 new Handler().postDelayed(new Runnable() {
                                     @Override
@@ -191,6 +249,17 @@ public class trainer_main extends Fragment {
                 });
             }
         };
+
+        if(t_cnt==0)
+        {
+            add_trainers.setVisibility(View.VISIBLE);
+            img_add_trainers.setVisibility(View.VISIBLE);
+        }
+        else
+        {
+            add_trainers.setVisibility(View.GONE);
+            img_add_trainers.setVisibility(View.GONE);
+        }
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(adapter);
@@ -267,6 +336,42 @@ public class trainer_main extends Fragment {
 
     private void onSearch(String s) {
 
+        TextView no_trainers;
+        ImageView img_no_trainers;
+
+        no_trainers = ll.findViewById(R.id.txt_no_trainers);
+        img_no_trainers = ll.findViewById(R.id.img_no_trainers);
+
+
+        String trainer;
+        boolean found=false;
+        for(int i=0; i<total_trainers.size(); i++)
+        {
+            trainer = total_trainers.get(i);
+            if(trainer.startsWith(s.toLowerCase()))
+                found = true;
+        }
+        if(found)
+        {
+            Log.d("TAG", "clients found");
+            no_trainers.setVisibility(View.GONE);
+            img_no_trainers.setVisibility(View.GONE);
+        }
+        else
+        {
+            if (t_cnt == 0) {
+                add_trainers.setVisibility(View.VISIBLE);
+                img_add_trainers.setVisibility(View.VISIBLE);
+            }
+            else
+            {
+                Log.d("TAG", "no clients found");
+                no_trainers.setVisibility(View.VISIBLE);
+                img_no_trainers.setVisibility(View.VISIBLE);
+            }
+        }
+
+
         Query query = firebaseFirestore.collection(mAuth.getUid()).document("user info").collection("trainers");
         FirestoreRecyclerOptions<trainer_list> options = new FirestoreRecyclerOptions.Builder<trainer_list>().setQuery(query.orderBy("name").startAt(s.toLowerCase()).endAt(s.toLowerCase()+"\uf8ff"), trainer_list.class).build();
         adapter = new FirestoreRecyclerAdapter<trainer_list, trainerViewHolder>(options) {
@@ -275,11 +380,16 @@ public class trainer_main extends Fragment {
             public trainerViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
                 View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.trainer_list, parent, false);
+                /*if(!(adapter.getItemCount()==0))
+                    add_trainers.setVisibility(View.GONE);*/
                 return new trainerViewHolder(view);
             }
 
             @Override
             protected void onBindViewHolder(@NonNull final trainerViewHolder holder, int position, @NonNull final trainer_list model) {
+
+                s_t_cnt=adapter.getItemCount();
+                Log.d("TAG",s_t_cnt+"");
 
                 Picasso.get().load(model.getUri()).into(holder.img_trainer_DP);
 
@@ -319,6 +429,8 @@ public class trainer_main extends Fragment {
                             @Override
                             public void onClick(DialogInterface dialog, int which)
                             {
+
+                                s_t_cnt--;
                                 flag = 0;
                                 firebaseFirestore.collection(mAuth.getUid()).document("user info").collection("trainers").document(model.getName().toLowerCase()).delete();
 
@@ -330,9 +442,24 @@ public class trainer_main extends Fragment {
                                             public void onClick(View view) {
                                                 Log.d("TAG", "undo");
                                                 flag = 1;
+                                                s_t_cnt--;
+                                                add_trainers.setVisibility(View.GONE);
+                                                img_add_trainers.setVisibility(View.GONE);
                                                 firebaseFirestore.collection(mAuth.getUid()).document("user info").collection("trainers").document(model.getName().toLowerCase()).set(model);
                                             }
                                         }).show();
+
+                                Log.d("TAG",s_t_cnt+"");
+                                if(s_t_cnt == 0)
+                                {
+                                    add_trainers.setVisibility(View.VISIBLE);
+                                    img_add_trainers.setVisibility(View.VISIBLE);
+                                }
+                                else
+                                {
+                                    add_trainers.setVisibility(View.GONE);
+                                    img_add_trainers.setVisibility(View.GONE);
+                                }
 
                                 new Handler().postDelayed(new Runnable() {
                                     @Override
@@ -385,6 +512,7 @@ public class trainer_main extends Fragment {
                 });
             }
         };
+
         adapter.startListening();
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(adapter);

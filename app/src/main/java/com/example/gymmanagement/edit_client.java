@@ -131,7 +131,7 @@ public class edit_client extends AppCompatActivity {
                 {
                     due = (Long.parseLong(amt) - Long.parseLong(paid))+"";
                     if(Long.parseLong(due)<0)
-                        due_amt.setText(0);
+                        due_amt.setText("-");
                     else
                         due_amt.setText(due);
                 }

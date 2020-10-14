@@ -38,6 +38,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -63,6 +65,8 @@ public class add_client extends AppCompatActivity {
     Uri uriProfile_image;
     String profile_imageURL;
     private static final int CHOOSE_IMAGE = 101;
+
+    ArrayList<String> client_names;
 
     Toolbar toolbar;
 
@@ -114,6 +118,21 @@ public class add_client extends AppCompatActivity {
 
         userID = mAuth.getUid();
 
+        client_names = new ArrayList<>();
+        firebaseFirestore.collection(userID).document("user info").collection("clients").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if(task.isSuccessful())
+                {
+                    for(QueryDocumentSnapshot documentSnapshot:task.getResult())
+                    {
+                        documentSnapshot.getData();
+                        client_names.add(documentSnapshot.get("name")+"");
+                    }
+                }
+            }
+        });
+
         edt_amt_paid.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
@@ -130,7 +149,7 @@ public class add_client extends AppCompatActivity {
                     if(Long.parseLong(due)>=0)
                         edt_amt_due.setText(due+"");
                     else
-                       edt_amt_due.setText("0");
+                       edt_amt_due.setText("-");
                 }
                 else
                     edt_amt_due.setText(amt);
@@ -303,6 +322,7 @@ public class add_client extends AppCompatActivity {
         String c_amt_due = edt_amt_due.getText().toString();
         String c_join_date = edt_join_date.getText().toString();
         String c_due_date = edt_due_date.getText().toString();
+        boolean client_collision = false;
 
         if(progressBar.getVisibility()==View.GONE)
             progressBar.setVisibility(View.VISIBLE);
@@ -314,6 +334,29 @@ public class add_client extends AppCompatActivity {
             edt_name.requestFocus();
             return;
         }
+        try
+        {
+            for(int i=0;i<client_names.size();i++)
+            {
+                String c_names = client_names.get(i);
+                if(edt_name.getText().toString().toLowerCase().equals(c_names))
+                {
+                    client_collision = true;
+                }
+            }
+            if(client_collision)
+            {
+                progressBar.setVisibility(View.GONE);
+                edt_name.setError("Client already exists");
+                edt_name.requestFocus();
+                return;
+            }
+        }
+        catch (Exception e)
+        {
+
+        }
+
         if(edt_phone.getText().toString().isEmpty())
         {
             progressBar.setVisibility(View.GONE);
@@ -379,6 +422,7 @@ public class add_client extends AppCompatActivity {
             edt_amt_paid.requestFocus();
             return;
         }
+
 
         FirebaseUser firebaseUser = mAuth.getCurrentUser();
         if(profile_imageURL!=null)

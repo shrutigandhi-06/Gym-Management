@@ -6,7 +6,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-
         tools:context=".after_login">
 
     <LinearLayout
@@ -16,20 +15,21 @@
         android:orientation="vertical"
         android:layout_marginTop="-150dp">
 
-        <ImageView
+        <!--<ImageView
             android:layout_width="150dp"
             android:layout_height="150dp"
-            android:src="@drawable/the_central_icon"
-            android:layout_marginBottom="50dp"/>
+            android:src="@drawable/app_logo_full_final"
+            android:layout_marginBottom="50dp"/> -->
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Input Session Entry"
             android:gravity="center"
-            android:textSize="27sp"
+            android:textSize="20sp"
             android:textColor="#fff"
-            android:textStyle="bold"/>
+            android:textStyle="bold"
+            android:layout_marginBottom="20dp"/>
 
         <com.toptoche.searchablespinnerlibrary.SearchableSpinner
             android:id="@+id/spinner_client_name"
@@ -37,7 +37,7 @@
             android:layout_height="45dp"
             android:padding="10dp"
             android:background="@drawable/rounded_border_edt"
-            android:inputType="text" />
+            android:inputType="text"/>
 
         <com.toptoche.searchablespinnerlibrary.SearchableSpinner
             android:id="@+id/spinner_trainer_attended"
