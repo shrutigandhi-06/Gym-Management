@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.transition.AutoTransition;
@@ -259,6 +260,25 @@ public class trainer_main extends Fragment {
                         s_intent.putExtra("trainer name", holder.name.getText().toString().toLowerCase());
                         getActivity().finish();
                         startActivity(s_intent);
+                    }
+                });
+                holder.phone.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent phone_intent = new Intent(Intent.ACTION_DIAL);
+                        phone_intent.setData(Uri.parse("tel:"+holder.phone.getText().toString()));
+                        startActivity(phone_intent);
+                    }
+                });
+                holder.email.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent email_intent = new Intent(Intent.ACTION_SEND);
+                        email_intent.putExtra(Intent.EXTRA_EMAIL,holder.email.getText().toString());
+                        email_intent.putExtra(Intent.EXTRA_SUBJECT,"Email Subject");
+                        email_intent.putExtra(Intent.EXTRA_TEXT,"Body of email");
+                        email_intent.setType("text/plain");
+                        startActivity(Intent.createChooser(email_intent, "Open with"));
                     }
                 });
             }
@@ -537,6 +557,25 @@ public class trainer_main extends Fragment {
                         s_intent.putExtra("trainer name", holder.name.getText().toString().toLowerCase());
                         getActivity().finish();
                         startActivity(s_intent);
+                    }
+                });
+                holder.phone.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent phone_intent = new Intent(Intent.ACTION_DIAL);
+                        phone_intent.setData(Uri.parse("tel:"+holder.phone.getText().toString()));
+                        startActivity(phone_intent);
+                    }
+                });
+                holder.email.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent email_intent = new Intent(Intent.ACTION_SEND);
+                        email_intent.putExtra(Intent.EXTRA_EMAIL,holder.email.getText().toString());
+                        email_intent.putExtra(Intent.EXTRA_SUBJECT,"Email Subject");
+                        email_intent.putExtra(Intent.EXTRA_TEXT,"Body of email");
+                        email_intent.setType("text/plain");
+                        startActivity(Intent.createChooser(email_intent, "Open with"));
                     }
                 });
             }

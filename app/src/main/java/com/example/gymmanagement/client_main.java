@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.transition.AutoTransition;
@@ -269,6 +270,26 @@ public class client_main extends Fragment {
                     startActivity(intent);
                     }
                 });
+
+                holder.img_phone.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent phone_intent = new Intent(Intent.ACTION_DIAL);
+                        phone_intent.setData(Uri.parse("tel:"+holder.phone.getText().toString()));
+                        startActivity(phone_intent);
+                    }
+                });
+                holder.img_email.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent email_intent = new Intent(Intent.ACTION_SEND);
+                        email_intent.putExtra(Intent.EXTRA_EMAIL,holder.email.getText().toString());
+                        email_intent.putExtra(Intent.EXTRA_SUBJECT,"Email Subject");
+                        email_intent.putExtra(Intent.EXTRA_TEXT,"Body of email");
+                        email_intent.setType("text/plain");
+                        startActivity(Intent.createChooser(email_intent,"Open with"));
+                    }
+                });
             }
         };
 
@@ -295,6 +316,7 @@ public class client_main extends Fragment {
         CardView client_cardView;
         RelativeLayout client_relative_layout;
         GridLayout buttons;
+        ImageView img_phone, img_email;
 
         CircularImageView imageView;
 
@@ -312,6 +334,8 @@ public class client_main extends Fragment {
             amt_paid = itemView.findViewById(R.id.client_paid);
             amt_due = itemView.findViewById(R.id.client_due);
             email = itemView.findViewById(R.id.client_email);
+            img_phone = itemView.findViewById(R.id.img_phone);
+            img_email = itemView.findViewById(R.id.img_email);
 
             buttons = itemView.findViewById(R.id.buttons);
             edit = itemView.findViewById(R.id.btn_client_edit);
@@ -557,6 +581,26 @@ public class client_main extends Fragment {
                         intent.putExtra("client name", holder.name.getText().toString().toLowerCase());
                         getActivity().finish();
                         startActivity(intent);
+                    }
+                });
+
+                holder.img_phone.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent phone_intent = new Intent(Intent.ACTION_DIAL);
+                        phone_intent.setData(Uri.parse("tel:"+holder.phone.getText().toString()));
+                        startActivity(phone_intent);
+                    }
+                });
+                holder.img_email.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent email_intent = new Intent(Intent.ACTION_SEND);
+                        email_intent.putExtra(Intent.EXTRA_EMAIL,holder.email.getText().toString());
+                        email_intent.putExtra(Intent.EXTRA_SUBJECT,"Email Subject");
+                        email_intent.putExtra(Intent.EXTRA_TEXT,"Body of email");
+                        email_intent.setType("text/plain");
+                        startActivity(Intent.createChooser(email_intent,"Open with"));
                     }
                 });
             }

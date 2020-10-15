@@ -38,6 +38,7 @@
                 android:padding="4dp"/>
 
             <ImageView
+                android:id="@+id/img_phone"
                 android:layout_width="18dp"
                 android:layout_height="18dp"
                 android:background="@drawable/icon_phone"
@@ -56,6 +57,7 @@
                 android:padding="4dp"/>
 
             <ImageView
+                android:id="@+id/img_email"
                 android:layout_width="18dp"
                 android:layout_height="18dp"
                 android:background="@drawable/icon_email"
