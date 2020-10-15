@@ -3,6 +3,7 @@ package com.example.gymmanagement;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -29,6 +30,7 @@ public class dashboard extends AppCompatActivity {
     String no_total_clients;
     ProgressBar progress_client;
     TextView total_clients;
+    CardView card_membership_expiry;
 
     Toolbar toolbar;
 
@@ -42,6 +44,14 @@ public class dashboard extends AppCompatActivity {
 
         progress_client = findViewById(R.id.progress_client);
         total_clients = findViewById(R.id.total_clients);
+        card_membership_expiry = findViewById(R.id.membership_expiry);
+        card_membership_expiry.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+                startActivity(new Intent(dashboard.this, membership_expiry.class));
+            }
+        });
 
         progress_client.setVisibility(View.VISIBLE);
         total_clients.setVisibility(View.GONE);

@@ -236,6 +236,7 @@ public class add_client extends AppCompatActivity {
                     errorText.setText("Select plan");
                 }
                 else
+                    //datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis()-1000);
                     new DatePickerDialog(add_client.this, j_date, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
             }
         });
@@ -374,7 +375,7 @@ public class add_client extends AppCompatActivity {
         if(edt_email.getText().toString().isEmpty())
         {
             progressBar.setVisibility(View.GONE);
-            edt_email.setError("Please enter name");
+            edt_email.setError("Please enter email address");
             edt_email.requestFocus();
             return;
         }
@@ -423,11 +424,9 @@ public class add_client extends AppCompatActivity {
             return;
         }
 
-
         FirebaseUser firebaseUser = mAuth.getCurrentUser();
         if(profile_imageURL!=null)
         {
-
             UserProfileChangeRequest profile = new UserProfileChangeRequest.Builder().setPhotoUri(Uri.parse(profile_imageURL)).build();
             firebaseUser.updateProfile(profile).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
