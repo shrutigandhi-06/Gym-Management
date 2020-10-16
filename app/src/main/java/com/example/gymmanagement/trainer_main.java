@@ -49,6 +49,8 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
+import de.cketti.mailto.EmailIntentBuilder;
+
 import static com.example.gymmanagement.client_main.c_cnt;
 
 public class trainer_main extends Fragment {
@@ -262,23 +264,21 @@ public class trainer_main extends Fragment {
                         startActivity(s_intent);
                     }
                 });
-                holder.phone.setOnClickListener(new View.OnClickListener() {
+                holder.img_phone.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         Intent phone_intent = new Intent(Intent.ACTION_DIAL);
-                        phone_intent.setData(Uri.parse("tel:"+holder.phone.getText().toString()));
+                        phone_intent.setData(Uri.parse("tel:"+model.getPhone()));
                         startActivity(phone_intent);
                     }
                 });
-                holder.email.setOnClickListener(new View.OnClickListener() {
+                holder.img_email.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Intent email_intent = new Intent(Intent.ACTION_SEND);
-                        email_intent.putExtra(Intent.EXTRA_EMAIL,holder.email.getText().toString());
-                        email_intent.putExtra(Intent.EXTRA_SUBJECT,"Email Subject");
-                        email_intent.putExtra(Intent.EXTRA_TEXT,"Body of email");
-                        email_intent.setType("text/plain");
-                        startActivity(Intent.createChooser(email_intent, "Open with"));
+                        Intent emailIntent = EmailIntentBuilder.from(getActivity())
+                                .to(model.getEmail())
+                                .build();
+                        startActivity(emailIntent);
                     }
                 });
             }
@@ -308,6 +308,7 @@ public class trainer_main extends Fragment {
         RelativeLayout relativeLayout;
         CircularImageView img_trainer_DP;
         GridLayout trainer_buttons;
+        ImageView img_phone, img_email;
 
         public trainerViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -327,6 +328,8 @@ public class trainer_main extends Fragment {
             delete = itemView.findViewById(R.id.btn_delete);
             edit = itemView.findViewById(R.id.btn_edit);
             trainer_session_info = itemView.findViewById(R.id.btn_trainer_sessions_info);
+            img_email = itemView.findViewById(R.id.icon_t_email);
+            img_phone = itemView.findViewById(R.id.icon_t_phone);
         }
     }
 
@@ -559,23 +562,21 @@ public class trainer_main extends Fragment {
                         startActivity(s_intent);
                     }
                 });
-                holder.phone.setOnClickListener(new View.OnClickListener() {
+                holder.img_phone.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         Intent phone_intent = new Intent(Intent.ACTION_DIAL);
-                        phone_intent.setData(Uri.parse("tel:"+holder.phone.getText().toString()));
+                        phone_intent.setData(Uri.parse("tel:"+model.getPhone()));
                         startActivity(phone_intent);
                     }
                 });
-                holder.email.setOnClickListener(new View.OnClickListener() {
+                holder.img_email.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Intent email_intent = new Intent(Intent.ACTION_SEND);
-                        email_intent.putExtra(Intent.EXTRA_EMAIL,holder.email.getText().toString());
-                        email_intent.putExtra(Intent.EXTRA_SUBJECT,"Email Subject");
-                        email_intent.putExtra(Intent.EXTRA_TEXT,"Body of email");
-                        email_intent.setType("text/plain");
-                        startActivity(Intent.createChooser(email_intent, "Open with"));
+                        Intent emailIntent = EmailIntentBuilder.from(getActivity())
+                                .to(model.getEmail())
+                                .build();
+                        startActivity(emailIntent);
                     }
                 });
             }

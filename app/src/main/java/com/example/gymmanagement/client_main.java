@@ -36,7 +36,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -49,6 +48,8 @@ import com.mikhaellopez.circularimageview.CircularImageView;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+
+import de.cketti.mailto.EmailIntentBuilder;
 
 public class client_main extends Fragment {
 
@@ -275,21 +276,34 @@ public class client_main extends Fragment {
                     @Override
                     public void onClick(View view) {
                         Intent phone_intent = new Intent(Intent.ACTION_DIAL);
-                        phone_intent.setData(Uri.parse("tel:"+holder.phone.getText().toString()));
+                        phone_intent.setData(Uri.parse("tel:"+model.getPhone()));
                         startActivity(phone_intent);
                     }
                 });
                 holder.img_email.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Intent email_intent = new Intent(Intent.ACTION_SEND);
-                        email_intent.putExtra(Intent.EXTRA_EMAIL,holder.email.getText().toString());
-                        email_intent.putExtra(Intent.EXTRA_SUBJECT,"Email Subject");
-                        email_intent.putExtra(Intent.EXTRA_TEXT,"Body of email");
-                        email_intent.setType("text/plain");
-                        startActivity(Intent.createChooser(email_intent,"Open with"));
+                        Intent emailIntent = EmailIntentBuilder.from(getActivity())
+                                .to(model.getEmail())
+                                .build();
+                        startActivity(emailIntent);
                     }
                 });
+
+                holder.img_profile.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        //createAndSaveFile();
+                        String client_details = "Name: "+model.getName() + "\n" + "Email: "+model.getEmail() + "\n" +"Contact no: "+ model.getPhone()
+                                + "\n" + "Join Date: "+model.getJoin_date() + "\n" + "Due Date: "+ model.getDue_date()
+                                + "\n" + "Plan: "+ model.getPlan() + "\n" + "Amount : "+ model.getAmount()
+                                + "\n" + "Amount Paid: "+ model.getAmt_paid() + "\n" + "Due Amount: "+ model.getAmt_due();
+                        Intent share_intent = new Intent(Intent.ACTION_VIEW);
+                        share_intent.setData(Uri.parse("https://api.whatsapp.com/send?phone="+"+91"+model.getPhone()+"&text="+client_details));
+                        startActivity(share_intent);
+                    }
+                });
+
             }
         };
 
@@ -309,6 +323,33 @@ public class client_main extends Fragment {
         return ll;
     }
 
+    /*private void createAndSaveFile() {
+        Intent file_intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+
+        file_intent.addCategory(Intent.CATEGORY_OPENABLE);
+        file_intent.setType("text/plain");
+        file_intent.putExtra(Intent.EXTRA_TITLE, "GymsterFile.txt");
+
+        startActivityForResult(file_intent, 1);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == 1)
+        {
+            if(resultCode == 1)
+            {
+                Uri uri = data.getData();
+                try {
+                    OutputStream outputStream = getC
+                }
+
+            }
+        }
+    }*/
+
     private class clientViewHolder extends RecyclerView.ViewHolder{
 
         TextView name, phone, email, join_date, due_date, plan, amount, amt_paid, amt_due;
@@ -316,7 +357,7 @@ public class client_main extends Fragment {
         CardView client_cardView;
         RelativeLayout client_relative_layout;
         GridLayout buttons;
-        ImageView img_phone, img_email;
+        ImageView img_phone, img_email,img_profile;
 
         CircularImageView imageView;
 
@@ -336,6 +377,7 @@ public class client_main extends Fragment {
             email = itemView.findViewById(R.id.client_email);
             img_phone = itemView.findViewById(R.id.img_phone);
             img_email = itemView.findViewById(R.id.img_email);
+            img_profile = itemView.findViewById(R.id.icon_profile);
 
             buttons = itemView.findViewById(R.id.buttons);
             edit = itemView.findViewById(R.id.btn_client_edit);
@@ -557,6 +599,7 @@ public class client_main extends Fragment {
                 holder.edit.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+
                         Intent intent = new Intent(getActivity(), edit_client.class);
                         intent.putExtra("name", holder.name.getText().toString());
                         intent.putExtra("phone", holder.phone.getText().toString());
@@ -588,19 +631,18 @@ public class client_main extends Fragment {
                     @Override
                     public void onClick(View view) {
                         Intent phone_intent = new Intent(Intent.ACTION_DIAL);
-                        phone_intent.setData(Uri.parse("tel:"+holder.phone.getText().toString()));
+                        phone_intent.setData(Uri.parse("tel:"+model.getPhone()));
                         startActivity(phone_intent);
                     }
                 });
                 holder.img_email.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Intent email_intent = new Intent(Intent.ACTION_SEND);
-                        email_intent.putExtra(Intent.EXTRA_EMAIL,holder.email.getText().toString());
-                        email_intent.putExtra(Intent.EXTRA_SUBJECT,"Email Subject");
-                        email_intent.putExtra(Intent.EXTRA_TEXT,"Body of email");
-                        email_intent.setType("text/plain");
-                        startActivity(Intent.createChooser(email_intent,"Open with"));
+                        Intent emailIntent = EmailIntentBuilder.from(getActivity())
+                                .to(model.getEmail())
+                                .build();
+                        startActivity(emailIntent);
+
                     }
                 });
             }

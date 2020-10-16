@@ -61,11 +61,21 @@
                 android:visibility="gone"
                 android:layout_marginTop="40dp">
 
+                <ImageView
+                    android:id="@+id/icon_t_phone"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:layout_marginBottom="1.5dp"
+                    android:layout_marginRight="4dp"
+                    android:background="@drawable/icon_background"
+                    android:src="@drawable/icon_phone" />
+
                 <TextView
                     android:id="@+id/txt_phoneNo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Phone No.: "
+                    android:layout_toRightOf="@id/icon_t_phone"
                     android:textStyle="bold"/>
 
                 <TextView
@@ -75,11 +85,22 @@
                     android:layout_height="wrap_content"
                     android:text="phone No"/>
 
+                <ImageView
+                    android:id="@+id/icon_t_email"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:src="@drawable/ic_email_24"
+                    android:layout_marginTop="1.5dp"
+                    android:layout_marginRight="4dp"
+                    android:background="@drawable/icon_background"
+                    android:layout_below="@id/icon_t_phone"/>
+
                 <TextView
                     android:id="@+id/txt_email"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/txt_phoneNo"
+                    android:layout_toRightOf="@id/icon_t_email"
                     android:text="Email Address: "
                     android:textStyle="bold"/>
 
@@ -91,11 +112,20 @@
                     android:layout_height="wrap_content"
                     android:text="email address"/>
 
+                <ImageView
+                    android:id="@+id/icon_blood_grp"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:layout_marginRight="4dp"
+                    android:src="@drawable/ic_bloog_grp"
+                    android:layout_below="@id/icon_t_email"/>
+
                 <TextView
                     android:id="@+id/txt_blood_grp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/txt_email"
+                    android:layout_toRightOf="@id/icon_blood_grp"
                     android:textStyle="bold"
                     android:text="Blood Group: "/>
 
@@ -107,11 +137,20 @@
                     android:layout_toRightOf="@id/txt_blood_grp"
                     android:text="blood group"/>
 
+                <ImageView
+                    android:id="@+id/icon_address"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:src="@drawable/ic_baseline_home_24"
+                    android:layout_marginRight="4dp"
+                    android:layout_below="@id/icon_blood_grp"/>
+
                 <TextView
                     android:id="@+id/txt_address"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/txt_blood_grp"
+                    android:layout_toRightOf="@id/icon_address"
                     android:textStyle="bold"
                     android:text="Address: "/>
 

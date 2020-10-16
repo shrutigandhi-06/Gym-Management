@@ -20,6 +20,7 @@
             android:layout_height="match_parent">
 
             <ImageView
+                android:id="@+id/icon_profile"
                 android:layout_width="18dp"
                 android:layout_height="18dp"
                 android:background="@drawable/icon_profile"
@@ -41,9 +42,11 @@
                 android:id="@+id/img_phone"
                 android:layout_width="18dp"
                 android:layout_height="18dp"
-                android:background="@drawable/icon_phone"
+                android:layout_marginLeft="99dp"
                 android:layout_marginTop="35dp"
-                android:layout_marginLeft="99dp"/>
+                android:layout_marginBottom="2dp"
+                android:background="@drawable/icon_background"
+                android:src="@drawable/icon_phone" />
 
             <TextView
                 android:id="@+id/txt_client_phone"
@@ -60,8 +63,9 @@
                 android:id="@+id/img_email"
                 android:layout_width="18dp"
                 android:layout_height="18dp"
-                android:background="@drawable/icon_email"
-                android:layout_marginTop="55dp"
+                android:src="@drawable/ic_email_24"
+                android:background="@drawable/icon_background"
+                android:layout_marginTop="57.5dp"
                 android:layout_marginLeft="100dp"/>
 
             <TextView
