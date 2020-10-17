@@ -13,6 +13,8 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +36,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfBody;
 import com.itextpdf.text.pdf.PdfWriter;
 
 import java.io.FileOutputStream;
@@ -61,7 +64,6 @@ public class session_info extends AppCompatActivity {
 
     String selected_client;
 
-    TextView t_attended;
     ArrayList<String> sessions_information;
 
     @Override
@@ -116,35 +118,29 @@ public class session_info extends AppCompatActivity {
         String i = "client";
         from_sessions.putExtra("flag", i);
 
-        t_attended = findViewById(R.id.txt_trainer_attended);
         sessions_information = new ArrayList<>();
 
         toolbar = findViewById(R.id.sessions_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        t_attended.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                adapter_class();
-                //createAndSaveFile();
-                savepdf();
-                Log.d("sessions", sessions_information.toString());
-                sessions_information.clear();
-                Log.d("sessions", sessions_information.toString()+"removed all");
-            }
-        });
     }
 
-    private void savepdf() {
+    private void savePDF() {
+        String pdf_format = "Date               Title                   Trainer attendant";
+        String new_line = "\n";
         Document doc=new Document();
         String mfile= selected_client+"'s sessions info";
-        String mfilepath= Environment.getExternalStorageDirectory()+"/"+mfile+".pdf";
+        String mfilepath= Environment.getExternalStorageDirectory().getPath()+"/Download"+"/"+mfile+".pdf";
         Font smallBold=new Font(Font.FontFamily.TIMES_ROMAN,12,Font.BOLD);
+        Font bigBold=new Font(Font.FontFamily.TIMES_ROMAN,20,Font.BOLD);
         try{
             PdfWriter.getInstance(doc,new FileOutputStream(mfilepath));
             doc.open();
+            doc.add(new Paragraph(selected_client.toUpperCase(),bigBold));
+            doc.add(new Paragraph(new_line,smallBold));
+            doc.add(new Paragraph(pdf_format,smallBold));
+            doc.add(new Paragraph(new_line,smallBold));
             for(int i = 0; i<sessions_information.size();i++)
             {
                 doc.add(new Paragraph(sessions_information.get(i),smallBold));
@@ -157,46 +153,6 @@ public class session_info extends AppCompatActivity {
             Toast.makeText(this,"This is Error msg : " +e.getMessage(), Toast.LENGTH_LONG).show();
         }
 
-    }
-
-    private void createAndSaveFile() {
-        Intent file_intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
-
-        file_intent.addCategory(Intent.CATEGORY_OPENABLE);
-        file_intent.setType("text/plain");
-        file_intent.putExtra(Intent.EXTRA_TITLE, selected_client+"'s sessions info"+".txt");
-        startActivityForResult(file_intent, 1);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == 1)
-        {
-            if(resultCode == RESULT_OK)
-            {
-                Uri uri = data.getData();
-                try
-                {
-                    OutputStream outputStream = getContentResolver().openOutputStream(uri);
-                     for(int i = 0; i<sessions_information.size();i++)
-                     {
-                        outputStream.write(sessions_information.get(i).getBytes());
-                     }
-                    outputStream.close();
-                    Toast.makeText(session_info.this, "file saved successfully", Toast.LENGTH_LONG).show();
-                }
-                catch (Exception e)
-                {
-                    Toast.makeText(session_info.this, "Failed to save file", Toast.LENGTH_LONG).show();
-
-                }
-            }
-            else
-            {
-                Toast.makeText(session_info.this, "file not saved", Toast.LENGTH_LONG).show();
-            }
-        }
     }
 
     private class sessionViewHolder extends RecyclerView.ViewHolder{
@@ -212,8 +168,7 @@ public class session_info extends AppCompatActivity {
         }
     }
 
-    public void adapter_class()
-    {
+    public void adapter_class() {
         Log.d("TAG", selected_client);
         Query query = firebaseFirestore.collection(mAuth.getUid()).document("user info").collection("clients").document(selected_client).collection("sessions").orderBy("date", Query.Direction.DESCENDING);
 
@@ -229,8 +184,7 @@ public class session_info extends AppCompatActivity {
 
             @Override
             protected void onBindViewHolder(@NonNull sessionViewHolder holder, int position, @NonNull sessions_getter_setter model) {
-
-                String per_session = "\nDate: " + model.getDate() + "    Time: " + model.getArrival_time() + "   Trainer Attended: " + model.getTrainer_attended()+"\n";
+                String per_session = model.getDate() + "         " + model.getArrival_time() + "         " + model.getTrainer_attended()+"\n";
                 sessions_information.add(per_session);
                 Log.d("TAG", "position");
                 //holder.Sr_no.setText(position+1+"");
@@ -258,9 +212,29 @@ public class session_info extends AppCompatActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        getMenuInflater().inflate(R.menu.download_session_info, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        finish();
-        startActivity(from_sessions);
+
+        int id = item.getItemId();
+        if(id == R.id.download_session_info)
+        {
+            adapter_class();
+            savePDF();
+            Log.d("sessions", sessions_information.toString());
+            sessions_information.clear();
+            Log.d("sessions", sessions_information.toString()+"removed all");
+        }
+        else
+        {
+            finish();
+            startActivity(from_sessions);
+        }
         return super.onOptionsItemSelected(item);
     }
 

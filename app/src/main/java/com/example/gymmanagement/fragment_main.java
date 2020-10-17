@@ -80,6 +80,8 @@ public class fragment_main extends AppCompatActivity {
 
             case R.id.item_logout:
             {
+                client_main.c_cnt = 0;
+                trainer_main.t_cnt = 0;
                 FirebaseAuth.getInstance().signOut();
                 MainActivity mainActivity = new MainActivity();
                 Log.d("TAG", "user logout");

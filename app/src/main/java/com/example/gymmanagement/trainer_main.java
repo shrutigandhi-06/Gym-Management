@@ -281,6 +281,17 @@ public class trainer_main extends Fragment {
                         startActivity(emailIntent);
                     }
                 });
+
+                holder.img_share.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        String trainer_details = "Name: "+model.getName() + "\n" + "Email: "+model.getEmail() + "\n" +"Contact no: "+ model.getPhone()
+                                + "\n" + "Blood Group: "+model.getBlood_grp() + "\n" + "Address: "+ model.getAddress();
+                        Intent share_intent = new Intent(Intent.ACTION_VIEW);
+                        share_intent.setData(Uri.parse("https://api.whatsapp.com/send?phone="+"+91"+model.getPhone()+"&text="+trainer_details));
+                        startActivity(share_intent);
+                    }
+                });
             }
         };
 
@@ -308,7 +319,7 @@ public class trainer_main extends Fragment {
         RelativeLayout relativeLayout;
         CircularImageView img_trainer_DP;
         GridLayout trainer_buttons;
-        ImageView img_phone, img_email;
+        ImageView img_phone, img_email, img_share;
 
         public trainerViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -330,6 +341,7 @@ public class trainer_main extends Fragment {
             trainer_session_info = itemView.findViewById(R.id.btn_trainer_sessions_info);
             img_email = itemView.findViewById(R.id.icon_t_email);
             img_phone = itemView.findViewById(R.id.icon_t_phone);
+            img_share = itemView.findViewById(R.id.icon_t_share);
         }
     }
 
@@ -577,6 +589,16 @@ public class trainer_main extends Fragment {
                                 .to(model.getEmail())
                                 .build();
                         startActivity(emailIntent);
+                    }
+                });
+                holder.img_share.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        String trainer_details = "Name: "+model.getName() + "\n" + "Email: "+model.getEmail() + "\n" +"Contact no: "+ model.getPhone()
+                                + "\n" + "Blood Group: "+model.getBlood_grp() + "\n" + "Address: "+ model.getAddress();
+                        Intent share_intent = new Intent(Intent.ACTION_VIEW);
+                        share_intent.setData(Uri.parse("https://api.whatsapp.com/send?phone="+"+91"+model.getPhone()+"&text="+trainer_details));
+                        startActivity(share_intent);
                     }
                 });
             }

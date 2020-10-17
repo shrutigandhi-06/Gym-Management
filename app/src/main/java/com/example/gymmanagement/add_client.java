@@ -173,6 +173,9 @@ public class add_client extends AppCompatActivity {
         client_save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+               /* Intent intent = new Intent(Intent.ACTION_SEND);
+                intent.setData(Uri.parse("https://api.whatsapp.com/send?phone="+"+91"+edt_phone.getText().toString().trim()+"&text="+"hello"));
+                startActivity(intent);*/
                 addClient();
             }
         });
@@ -206,7 +209,6 @@ public class add_client extends AppCompatActivity {
                 Log.d("TAG", "month: "+m);
                 Log.d("TAG", "year: "+y);
 
-
                 if(c_plan.equals("1 Month"))
                     x = 30;
                 else if(c_plan.equals("3 Months"))
@@ -236,8 +238,10 @@ public class add_client extends AppCompatActivity {
                     errorText.setText("Select plan");
                 }
                 else
-                    //datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis()-1000);
+                {
                     new DatePickerDialog(add_client.this, j_date, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
+                }
+
             }
         });
 

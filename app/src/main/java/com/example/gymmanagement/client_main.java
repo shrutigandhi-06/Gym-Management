@@ -290,10 +290,9 @@ public class client_main extends Fragment {
                     }
                 });
 
-                holder.img_profile.setOnClickListener(new View.OnClickListener() {
+                holder.img_share.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        //createAndSaveFile();
                         String client_details = "Name: "+model.getName() + "\n" + "Email: "+model.getEmail() + "\n" +"Contact no: "+ model.getPhone()
                                 + "\n" + "Join Date: "+model.getJoin_date() + "\n" + "Due Date: "+ model.getDue_date()
                                 + "\n" + "Plan: "+ model.getPlan() + "\n" + "Amount : "+ model.getAmount()
@@ -323,33 +322,6 @@ public class client_main extends Fragment {
         return ll;
     }
 
-    /*private void createAndSaveFile() {
-        Intent file_intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
-
-        file_intent.addCategory(Intent.CATEGORY_OPENABLE);
-        file_intent.setType("text/plain");
-        file_intent.putExtra(Intent.EXTRA_TITLE, "GymsterFile.txt");
-
-        startActivityForResult(file_intent, 1);
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if(requestCode == 1)
-        {
-            if(resultCode == 1)
-            {
-                Uri uri = data.getData();
-                try {
-                    OutputStream outputStream = getC
-                }
-
-            }
-        }
-    }*/
-
     private class clientViewHolder extends RecyclerView.ViewHolder{
 
         TextView name, phone, email, join_date, due_date, plan, amount, amt_paid, amt_due;
@@ -357,7 +329,7 @@ public class client_main extends Fragment {
         CardView client_cardView;
         RelativeLayout client_relative_layout;
         GridLayout buttons;
-        ImageView img_phone, img_email,img_profile;
+        ImageView img_phone, img_email,img_share, ui;
 
         CircularImageView imageView;
 
@@ -377,7 +349,7 @@ public class client_main extends Fragment {
             email = itemView.findViewById(R.id.client_email);
             img_phone = itemView.findViewById(R.id.img_phone);
             img_email = itemView.findViewById(R.id.img_email);
-            img_profile = itemView.findViewById(R.id.icon_profile);
+            img_share = itemView.findViewById(R.id.icon_share);
 
             buttons = itemView.findViewById(R.id.buttons);
             edit = itemView.findViewById(R.id.btn_client_edit);
@@ -643,6 +615,18 @@ public class client_main extends Fragment {
                                 .build();
                         startActivity(emailIntent);
 
+                    }
+                });
+                holder.img_share.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        String client_details = "Name: "+model.getName() + "\n" + "Email: "+model.getEmail() + "\n" +"Contact no: "+ model.getPhone()
+                                + "\n" + "Join Date: "+model.getJoin_date() + "\n" + "Due Date: "+ model.getDue_date()
+                                + "\n" + "Plan: "+ model.getPlan() + "\n" + "Amount : "+ model.getAmount()
+                                + "\n" + "Amount Paid: "+ model.getAmt_paid() + "\n" + "Due Amount: "+ model.getAmt_due();
+                        Intent share_intent = new Intent(Intent.ACTION_VIEW);
+                        share_intent.setData(Uri.parse("https://api.whatsapp.com/send?phone="+"+91"+model.getPhone()+"&text="+client_details));
+                        startActivity(share_intent);
                     }
                 });
             }

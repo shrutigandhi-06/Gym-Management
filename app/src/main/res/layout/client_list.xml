@@ -12,8 +12,8 @@
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         app:cardCornerRadius="8dp"
-        app:cardElevation="5dp"
-        app:cardBackgroundColor="#FFFDFD">
+        app:cardElevation="5dp">
+
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -23,20 +23,21 @@
                 android:id="@+id/icon_profile"
                 android:layout_width="18dp"
                 android:layout_height="18dp"
-                android:background="@drawable/icon_profile"
+                android:layout_marginLeft="100dp"
                 android:layout_marginTop="15dp"
-               android:layout_marginLeft="100dp"/>
+                android:background="@drawable/icon_profile" />
 
             <TextView
                 android:id="@+id/txt_client_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="       Name:"
-                android:textSize="15sp"
-                android:textStyle="bold"
                 android:layout_marginLeft="120dp"
-               android:layout_marginTop="10dp"
-                android:padding="4dp"/>
+                android:layout_marginTop="10dp"
+                android:padding="4dp"
+                android:text="Name:"
+                android:textIsSelectable="true"
+                android:textSize="15sp"
+                android:textStyle="bold" />
 
             <ImageView
                 android:id="@+id/img_phone"
@@ -52,32 +53,34 @@
                 android:id="@+id/txt_client_phone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Phone no.:"
-                android:textSize="15sp"
-                android:textStyle="bold"
-               android:layout_marginLeft="120dp"
+                android:layout_marginLeft="120dp"
                 android:layout_marginTop="30dp"
-                android:padding="4dp"/>
+                android:padding="4dp"
+                android:text="Phone no.:"
+                android:textIsSelectable="true"
+                android:textSize="15sp"
+                android:textStyle="bold" />
 
             <ImageView
                 android:id="@+id/img_email"
                 android:layout_width="18dp"
                 android:layout_height="18dp"
-                android:src="@drawable/ic_email_24"
-                android:background="@drawable/icon_background"
+                android:layout_marginLeft="100dp"
                 android:layout_marginTop="57.5dp"
-                android:layout_marginLeft="100dp"/>
+                android:background="@drawable/icon_background"
+                android:src="@drawable/ic_email_24" />
 
             <TextView
                 android:id="@+id/client_email"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="4dp"
-                android:text="         Email:"
-                android:textStyle="bold"
-                android:layout_marginTop="50dp"
                 android:layout_marginLeft="120dp"
-                android:layout_marginBottom="5dp"/>
+                android:layout_marginTop="50dp"
+                android:layout_marginBottom="5dp"
+                android:padding="4dp"
+                android:text="Email:"
+                android:textIsSelectable="true"
+                android:textStyle="bold" />
 
 
             <com.mikhaellopez.circularimageview.CircularImageView
@@ -87,11 +90,18 @@
                 android:layout_gravity="left"
                 android:layout_marginLeft="7dp"
                 android:layout_marginTop="4dp"
-                android:src="@drawable/default_photo"/>
+                android:src="@drawable/default_photo" />
+
+            <ImageView
+                android:id="@+id/icon_share"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_margin="10dp"
+                android:src="@drawable/icon_share" />
         </RelativeLayout>
 
-
-    <LinearLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -109,6 +119,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Join Date:"
+                    android:textIsSelectable="true"
                     android:layout_marginTop="10dp"
                     android:layout_marginLeft="10dp"
                     android:textStyle="bold"
@@ -119,6 +130,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_toRightOf="@id/join_date"
+                    android:textIsSelectable="true"
                     android:layout_marginTop="10dp"
                     android:padding="2dp"
                     android:text="join date"/>
@@ -129,6 +141,7 @@
                     android:layout_height="wrap_content"
                     android:text=" Due Date:"
                     android:layout_toRightOf="@id/join_date"
+                    android:textIsSelectable="true"
                     android:layout_marginTop="10dp"
                     android:layout_marginLeft="100dp"
                     android:textStyle="bold"
@@ -139,6 +152,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Due date"
+                    android:textIsSelectable="true"
                     android:layout_marginTop="10dp"
                     android:padding="2dp"
                     android:layout_toRightOf="@id/due_date"/>
@@ -149,6 +163,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/join_date"
                     android:padding="2dp"
+                    android:textIsSelectable="true"
                     android:textStyle="bold"
                     android:text="         Plan:"
                     android:layout_marginLeft="10dp"/>
@@ -160,6 +175,7 @@
                     android:layout_toRightOf="@id/plan"
                     android:layout_below="@id/client_join_date"
                     android:text="Plan"
+                    android:textIsSelectable="true"
                     android:padding="2dp"/>
 
                 <TextView
@@ -167,6 +183,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Amount:"
+                    android:textIsSelectable="true"
                     android:textStyle="bold"
                     android:layout_below="@id/due_date"
                     android:layout_toRightOf="@id/plan"
@@ -178,6 +195,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Amount"
+                    android:textIsSelectable="true"
                     android:layout_toRightOf="@id/amount"
                     android:layout_below="@id/client_due_date"
                     android:padding="2dp"/>
@@ -187,6 +205,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="         Paid:"
+                    android:textIsSelectable="true"
                     android:layout_below="@id/plan"
                     android:layout_marginLeft="10dp"
                     android:textStyle="bold"
@@ -197,6 +216,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Paid"
+                    android:textIsSelectable="true"
                     android:layout_below="@id/client_plan"
                     android:layout_toRightOf="@id/paid"
                     android:padding="2dp"/>
@@ -206,6 +226,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Due:"
+                    android:textIsSelectable="true"
                     android:textStyle="bold"
                     android:layout_below="@id/amount"
                     android:layout_toRightOf="@id/paid"
@@ -217,6 +238,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Due"
+                    android:textIsSelectable="true"
                     android:layout_below="@id/client_amount"
                     android:layout_toRightOf="@id/due"
                     android:padding="2dp"/>
@@ -236,7 +258,6 @@
                 android:id="@+id/edit_card_view"
                 android:layout_width="wrap_content"
                 android:layout_height="25dp"
-                app:cardBackgroundColor="#FFFDFD"
                 app:cardElevation="6dp"
                 android:layout_columnWeight="2"
                 android:layout_marginRight="1dp"
@@ -259,8 +280,7 @@
                 android:layout_columnWeight="2"
                 android:layout_marginRight="1dp"
                 android:layout_marginLeft="1dp"
-                app:cardElevation="6dp"
-                app:cardBackgroundColor="#FFFDFD">
+                app:cardElevation="6dp">
 
                 <Button
                     android:id="@+id/btn_client_delete"
@@ -275,8 +295,7 @@
                 android:layout_height="45dp"
                 android:layout_columnWeight="2"
                 android:layout_columnSpan="2"
-                app:cardElevation="5dp"
-                app:cardBackgroundColor="#FFFDFD">
+                app:cardElevation="5dp">
 
                 <Button
                     android:id="@+id/btn_sessions_info"
@@ -286,7 +305,7 @@
                     android:elevation="3dp"
                     android:layout_below="@id/edit_card_view"
                     android:layout_marginTop="3dp"
-                    android:background="#FFFDFD"
+                    android:background="#45ffffff"
                     android:layout_gravity="center"/>
             </androidx.cardview.widget.CardView>
         </GridLayout>

@@ -17,14 +17,6 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
-            <ImageView
-                android:id="@+id/img_profile"
-                android:layout_width="18dp"
-                android:layout_height="18dp"
-                android:background="@drawable/icon_profile"
-                android:layout_marginTop="29dp"
-                android:layout_marginLeft="10dp"/>
             <TextView
                 android:id="@+id/txt_trainer_name"
                 android:layout_width="wrap_content"
@@ -32,7 +24,7 @@
                 android:layout_marginLeft="5dp"
                 android:layout_marginTop="27dp"
                 android:text="Name"
-                android:layout_toRightOf="@id/img_profile"
+                android:layout_toRightOf="@id/trainer_profile_pic"
                 android:textStyle="bold"
                 android:textSize="15sp"/>
 
@@ -40,11 +32,20 @@
                 android:id="@+id/trainer_profile_pic"
                 android:layout_width="75dp"
                 android:layout_height="75dp"
-                android:layout_alignParentRight="true"
+                android:layout_alignParentLeft="true"
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
                 android:src="@drawable/default_photo"/>
+
+            <ImageView
+                android:id="@+id/icon_t_share"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/icon_share"
+                android:layout_alignParentRight="true"
+                android:layout_margin="10dp"/>
+
         </RelativeLayout>
 
         <LinearLayout
@@ -52,6 +53,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:layout_marginTop="35dp"
             android:padding="10dp">
 
             <RelativeLayout
@@ -117,6 +119,7 @@
                     android:layout_width="18dp"
                     android:layout_height="18dp"
                     android:layout_marginRight="4dp"
+                    android:layout_marginTop="1.5dp"
                     android:src="@drawable/ic_bloog_grp"
                     android:layout_below="@id/icon_t_email"/>
 
@@ -160,53 +163,8 @@
                     android:layout_toRightOf="@id/txt_address"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="address"/>
-
-               <!-- <GridLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:rowCount="1"
-                    android:columnCount="2"
-                    android:layout_below="@id/txt_trainer_address"
-                    android:layout_marginTop="15dp">
-
-                    <androidx.cardview.widget.CardView
-                        android:layout_width="wrap_content"
-                        android:layout_height="25dp"
-                        app:cardBackgroundColor="#FFFDFD"
-                        app:cardElevation="6dp"
-                        android:layout_columnWeight="2"
-                        android:layout_marginRight="1dp"
-                        android:layout_marginLeft="1dp">
-
-                        <Button
-                            android:id="@+id/btn_edit"
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:background="@drawable/ic_edit_24"
-                            android:layout_gravity="center"/>
-                    </androidx.cardview.widget.CardView>
-
-                    <androidx.cardview.widget.CardView
-                        android:layout_width="wrap_content"
-                        android:layout_height="25dp"
-                        android:layout_toRightOf="@id/edit_card_view"
-                        android:layout_columnWeight="2"
-                        android:layout_marginRight="1dp"
-                        android:layout_marginLeft="1dp"
-                        app:cardElevation="6dp"
-                        app:cardBackgroundColor="#FFFDFD">
-
-                        <Button
-                            android:id="@+id/btn_delete"
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:background="@drawable/ic_delete_24"
-                            android:layout_gravity="center"/>
-                    </androidx.cardview.widget.CardView>
-
-
-                </GridLayout>-->
+                    android:text="address"
+                    android:layout_marginBottom="5dp"/>
 
             </RelativeLayout>
 

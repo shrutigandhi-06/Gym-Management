@@ -8,7 +8,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +19,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
@@ -27,13 +31,20 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfWriter;
 
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 
 public class trainer_session_info extends AppCompatActivity {
 
     Toolbar t_session_toolbar;
     RecyclerView t_session_recycler_view;
+
+    ArrayList t_session_information;
 
     Spinner t_name_spinner;
 
@@ -51,6 +62,7 @@ public class trainer_session_info extends AppCompatActivity {
         setContentView(R.layout.activity_trainer_session_info);
 
         t_name_spinner = findViewById(R.id.t_name_spinner);
+        t_session_information = new ArrayList();
 
         firebaseFirestore = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
@@ -105,6 +117,34 @@ public class trainer_session_info extends AppCompatActivity {
 
     }
 
+    private void savePDF() {
+        String pdf_format = "Date               Title                      Attended CLient";
+        String new_line = "\n";
+        Document doc=new Document();
+        String mfile= selected_trainer+"'s sessions info";
+        String mfilepath= Environment.getExternalStorageDirectory().getPath()+"/Download"+"/"+mfile+".pdf";
+        Font smallBold=new Font(Font.FontFamily.TIMES_ROMAN,12,Font.BOLD);
+        Font bigBold=new Font(Font.FontFamily.TIMES_ROMAN,20,Font.BOLD);
+        try{
+            PdfWriter.getInstance(doc,new FileOutputStream(mfilepath));
+            doc.open();
+            doc.add(new Paragraph(selected_trainer.toUpperCase(),bigBold));
+            doc.add(new Paragraph(new_line,smallBold));
+            doc.add(new Paragraph(pdf_format,smallBold));
+            doc.add(new Paragraph(new_line,smallBold));
+            for(int i = 0; i<t_session_information.size();i++)
+            {
+                doc.add(new Paragraph(t_session_information.get(i).toString(),smallBold));
+            }
+            doc.close();
+            Toast.makeText(this, ""+mfile+".pdf"+" is saved to "+mfilepath, Toast.LENGTH_LONG).show();
+        }
+        catch (Exception e)
+        {
+            Toast.makeText(this,"This is Error msg : " +e.getMessage(), Toast.LENGTH_LONG).show();
+        }
+    }
+
     private class trainerViewHolder extends RecyclerView.ViewHolder{
 
         TextView date, time, client_attended;
@@ -135,7 +175,8 @@ public class trainer_session_info extends AppCompatActivity {
 
             @Override
             protected void onBindViewHolder(@NonNull trainerViewHolder holder, int position, @NonNull trainer_sessions_getter_setter model) {
-
+                String per_session = model.getT_arrival_date() + "         " + model.getT_arrival_time() + "         " + model.getClient_attended()+"\n";
+                t_session_information.add(per_session);
                 holder.date.setText(model.getT_arrival_date());
                 holder.time.setText(model.getT_arrival_time());
                 holder.client_attended.setText(model.getClient_attended());
@@ -167,10 +208,29 @@ public class trainer_session_info extends AppCompatActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        finish();
-        startActivity(from_t_session);
-        return super.onOptionsItemSelected(item);
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.download_session_info, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        int id = item.getItemId();
+        if(id == R.id.download_session_info)
+        {
+            t_adapter_class();
+            savePDF();
+            Log.d("sessions", t_session_information.toString());
+            t_session_information.clear();
+            Log.d("sessions", t_session_information.toString()+"removed all");
+        }
+        else
+        {
+            finish();
+            startActivity(from_t_session);
+            return super.onOptionsItemSelected(item);
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
