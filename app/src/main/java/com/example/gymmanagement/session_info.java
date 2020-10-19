@@ -65,6 +65,7 @@ public class session_info extends AppCompatActivity {
     String selected_client;
 
     ArrayList<String> sessions_information;
+    int cnt = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,6 +106,7 @@ public class session_info extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
                 selected_client = adapterView.getItemAtPosition(position).toString();
+                sessions_information.clear();
                 adapter_class();
             }
 
@@ -129,12 +131,13 @@ public class session_info extends AppCompatActivity {
     private void savePDF() {
         String pdf_format = "Date               Title                   Trainer attendant";
         String new_line = "\n";
-        Document doc=new Document();
-        String mfile= selected_client+"'s sessions info";
-        String mfilepath= Environment.getExternalStorageDirectory().getPath()+"/Download"+"/"+mfile+".pdf";
-        Font smallBold=new Font(Font.FontFamily.TIMES_ROMAN,12,Font.BOLD);
-        Font bigBold=new Font(Font.FontFamily.TIMES_ROMAN,20,Font.BOLD);
-        try{
+        Document doc = new Document();
+        String mfile = selected_client+"'s sessions info";
+        String mfilepath = Environment.getExternalStorageDirectory().getPath()+"/Download"+"/"+mfile+".pdf";
+        Font smallBold = new Font(Font.FontFamily.TIMES_ROMAN,12,Font.BOLD);
+        Font bigBold = new Font(Font.FontFamily.TIMES_ROMAN,20,Font.BOLD);
+        try
+        {
             PdfWriter.getInstance(doc,new FileOutputStream(mfilepath));
             doc.open();
             doc.add(new Paragraph(selected_client.toUpperCase(),bigBold));
@@ -144,8 +147,10 @@ public class session_info extends AppCompatActivity {
             for(int i = 0; i<sessions_information.size();i++)
             {
                 doc.add(new Paragraph(sessions_information.get(i),smallBold));
+                cnt++;
             }
             doc.close();
+            Log.d("sessions", cnt + "after for loop");
             Toast.makeText(this, ""+mfile+".pdf"+" is saved to "+mfilepath, Toast.LENGTH_LONG).show();
         }
         catch (Exception e)
@@ -228,7 +233,8 @@ public class session_info extends AppCompatActivity {
             savePDF();
             Log.d("sessions", sessions_information.toString());
             sessions_information.clear();
-            Log.d("sessions", sessions_information.toString()+"removed all");
+            Log.d("sessions", sessions_information.toString()+"removed all "+cnt);
+            cnt = 0;
         }
         else
         {

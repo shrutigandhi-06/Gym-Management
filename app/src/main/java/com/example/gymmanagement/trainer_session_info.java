@@ -44,7 +44,7 @@ public class trainer_session_info extends AppCompatActivity {
     Toolbar t_session_toolbar;
     RecyclerView t_session_recycler_view;
 
-    ArrayList t_session_information;
+    ArrayList<String> t_session_information;
 
     Spinner t_name_spinner;
 
@@ -55,6 +55,7 @@ public class trainer_session_info extends AppCompatActivity {
     Intent from_t_session;
     String selected_trainer;
     ArrayList<String> t_names= new ArrayList<>();
+    int cnt = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,6 +107,7 @@ public class trainer_session_info extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
                 selected_trainer = adapterView.getItemAtPosition(position).toString();
+                t_session_information.clear();
                 t_adapter_class();
             }
 
@@ -121,11 +123,12 @@ public class trainer_session_info extends AppCompatActivity {
         String pdf_format = "Date               Title                      Attended CLient";
         String new_line = "\n";
         Document doc=new Document();
-        String mfile= selected_trainer+"'s sessions info";
-        String mfilepath= Environment.getExternalStorageDirectory().getPath()+"/Download"+"/"+mfile+".pdf";
-        Font smallBold=new Font(Font.FontFamily.TIMES_ROMAN,12,Font.BOLD);
-        Font bigBold=new Font(Font.FontFamily.TIMES_ROMAN,20,Font.BOLD);
-        try{
+        String mfile = selected_trainer+"'s sessions info";
+        String mfilepath = Environment.getExternalStorageDirectory().getPath()+"/Download"+"/"+mfile+".pdf";
+        Font smallBold = new Font(Font.FontFamily.TIMES_ROMAN,12,Font.BOLD);
+        Font bigBold = new Font(Font.FontFamily.TIMES_ROMAN,20,Font.BOLD);
+        try
+        {
             PdfWriter.getInstance(doc,new FileOutputStream(mfilepath));
             doc.open();
             doc.add(new Paragraph(selected_trainer.toUpperCase(),bigBold));
@@ -135,6 +138,7 @@ public class trainer_session_info extends AppCompatActivity {
             for(int i = 0; i<t_session_information.size();i++)
             {
                 doc.add(new Paragraph(t_session_information.get(i).toString(),smallBold));
+                cnt++;
             }
             doc.close();
             Toast.makeText(this, ""+mfile+".pdf"+" is saved to "+mfilepath, Toast.LENGTH_LONG).show();
@@ -158,8 +162,7 @@ public class trainer_session_info extends AppCompatActivity {
         }
     }
 
-    public void t_adapter_class()
-    {
+    public void t_adapter_class() {
         Query query = firebaseFirestore.collection(mAuth.getUid()).document("user info").collection("trainers").document(selected_trainer).collection("sessions").orderBy("t_arrival_date", Query.Direction.DESCENDING);
 
         FirestoreRecyclerOptions<trainer_sessions_getter_setter> options = new FirestoreRecyclerOptions.Builder<trainer_sessions_getter_setter>().setQuery(query, trainer_sessions_getter_setter.class).build();
@@ -223,7 +226,8 @@ public class trainer_session_info extends AppCompatActivity {
             savePDF();
             Log.d("sessions", t_session_information.toString());
             t_session_information.clear();
-            Log.d("sessions", t_session_information.toString()+"removed all");
+            Log.d("sessions", t_session_information.toString()+"removed all "+cnt);
+            cnt = 0;
         }
         else
         {
