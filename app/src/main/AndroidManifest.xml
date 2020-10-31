@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:requestLegacyExternalStorage="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".membership_expiry"></activity>
+        <activity android:name=".membership_expiry"/>
         <activity android:name=".trainer_session_info" />
         <activity android:name=".dashboard" />
         <activity android:name=".app_intro" />
