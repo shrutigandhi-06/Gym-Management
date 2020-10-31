@@ -26,11 +26,11 @@ public class dashboard extends AppCompatActivity {
     FirebaseFirestore firebaseFirestore;
     FirebaseAuth mAuth;
 
-    ArrayList<String> clients;
-    String no_total_clients;
-    ProgressBar progress_client;
-    TextView total_clients;
-    CardView card_membership_expiry;
+    ArrayList<String> clients, trainers;
+    String no_total_clients, no_total_trainers;
+    ProgressBar progress_client,progress_trainer;
+    TextView total_clients,total_trainers;
+    CardView card_membership_expiry,total_clients_card, total_trainers_card, my_account_card;
 
     Toolbar toolbar;
 
@@ -43,8 +43,33 @@ public class dashboard extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
         progress_client = findViewById(R.id.progress_client);
+        progress_trainer = findViewById(R.id.progress_trainer);
         total_clients = findViewById(R.id.total_clients);
-        card_membership_expiry = findViewById(R.id.membership_expiry);
+        total_trainers = findViewById(R.id.total_trainers);
+
+        total_clients_card = findViewById(R.id.total_clients_card);
+        total_clients_card.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(dashboard.this, fragment_main.class);
+                String i = "client";
+                intent.putExtra("flag", i);
+                startActivity(intent);
+            }
+        });
+
+        total_trainers_card = findViewById(R.id.total_trainers_card);
+        total_trainers_card.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(dashboard.this, fragment_main.class);
+                String i = "trainer";
+                intent.putExtra("flag", i);
+                startActivity(intent);
+            }
+        });
+
+        card_membership_expiry = findViewById(R.id.membership_expiry_card);
         card_membership_expiry.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -54,7 +79,9 @@ public class dashboard extends AppCompatActivity {
         });
 
         progress_client.setVisibility(View.VISIBLE);
+        progress_trainer.setVisibility(View.VISIBLE);
         total_clients.setVisibility(View.GONE);
+        total_trainers.setVisibility(View.GONE);
 
         toolbar = findViewById(R.id.dashboard_toolbar);
         setSupportActionBar(toolbar);
@@ -77,6 +104,26 @@ public class dashboard extends AppCompatActivity {
                     total_clients.setVisibility(View.VISIBLE);
                     no_total_clients = "(" + (clients.size()) + ")";
                     total_clients.setText(no_total_clients);
+                }
+            }
+        });
+
+        trainers = new ArrayList<>();
+
+        firebaseFirestore.collection(mAuth.getUid()).document("user info").collection("trainers").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if(task.isSuccessful())
+                {
+                    for(QueryDocumentSnapshot documentSnapshot:task.getResult())
+                    {
+                        documentSnapshot.getData();
+                        trainers.add(documentSnapshot.get("name")+"");
+                    }
+                    progress_trainer.setVisibility(View.GONE);
+                    total_trainers.setVisibility(View.VISIBLE);
+                    no_total_trainers = "(" + (trainers.size()) + ")";
+                    total_trainers.setText(no_total_trainers);
                 }
             }
         });
