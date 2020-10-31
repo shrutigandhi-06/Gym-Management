@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
@@ -21,6 +22,7 @@ import com.google.firebase.auth.AdditionalUserInfo;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
@@ -75,7 +77,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             case R.id.txt_forgot_password:
             {
-                startActivity(new Intent(getApplicationContext(), reset_password.class));
+
+                reset_password();
+                //startActivity(new Intent(getApplicationContext(), reset_password.class));
             }
         }
     }
@@ -151,6 +155,31 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
             }
         });
+    }
+
+    private void reset_password() {
+
+        if(TextUtils.isEmpty(login_email.getText().toString()))
+        {
+            Toast.makeText(getApplicationContext(),"please enter valid email address", Toast.LENGTH_LONG).show();
+        }
+        else
+        {
+            mAuth.sendPasswordResetEmail(login_email.getText().toString()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+
+                    if(task.isSuccessful())
+                    {
+                        Toast.makeText(getApplicationContext(), "reset password link sent", Toast.LENGTH_SHORT).show();
+                    }
+                    else
+                    {
+                        Toast.makeText(getApplicationContext(), task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                }
+            });
+        }
     }
 
     @Override

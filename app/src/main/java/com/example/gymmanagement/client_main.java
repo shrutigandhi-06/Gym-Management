@@ -298,7 +298,7 @@ public class client_main extends Fragment {
                                 + "\n" + "Plan: "+ model.getPlan() + "\n" + "Amount : "+ model.getAmount()
                                 + "\n" + "Amount Paid: "+ model.getAmt_paid() + "\n" + "Due Amount: "+ model.getAmt_due();
                         Intent share_intent = new Intent(Intent.ACTION_VIEW);
-                        share_intent.setData(Uri.parse("https://api.whatsapp.com/send?phone="+"+91"+model.getPhone()+"&text="+client_details));
+                        share_intent.setData(Uri.parse("https://api.whatsapp.com/send?phone="+"&text="+client_details));
                         startActivity(share_intent);
                     }
                 });
@@ -625,7 +625,7 @@ public class client_main extends Fragment {
                                 + "\n" + "Plan: "+ model.getPlan() + "\n" + "Amount : "+ model.getAmount()
                                 + "\n" + "Amount Paid: "+ model.getAmt_paid() + "\n" + "Due Amount: "+ model.getAmt_due();
                         Intent share_intent = new Intent(Intent.ACTION_VIEW);
-                        share_intent.setData(Uri.parse("https://api.whatsapp.com/send?phone="+"+91"+model.getPhone()+"&text="+client_details));
+                        share_intent.setData(Uri.parse("https://api.whatsapp.com/send?phone="+"&text="+client_details));
                         startActivity(share_intent);
                     }
                 });

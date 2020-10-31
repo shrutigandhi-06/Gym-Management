@@ -288,7 +288,7 @@ public class trainer_main extends Fragment {
                         String trainer_details = "Name: "+model.getName() + "\n" + "Email: "+model.getEmail() + "\n" +"Contact no: "+ model.getPhone()
                                 + "\n" + "Blood Group: "+model.getBlood_grp() + "\n" + "Address: "+ model.getAddress();
                         Intent share_intent = new Intent(Intent.ACTION_VIEW);
-                        share_intent.setData(Uri.parse("https://api.whatsapp.com/send?phone="+"+91"+model.getPhone()+"&text="+trainer_details));
+                        share_intent.setData(Uri.parse("https://api.whatsapp.com/send?phone="+"&text="+trainer_details));
                         startActivity(share_intent);
                     }
                 });
@@ -597,7 +597,7 @@ public class trainer_main extends Fragment {
                         String trainer_details = "Name: "+model.getName() + "\n" + "Email: "+model.getEmail() + "\n" +"Contact no: "+ model.getPhone()
                                 + "\n" + "Blood Group: "+model.getBlood_grp() + "\n" + "Address: "+ model.getAddress();
                         Intent share_intent = new Intent(Intent.ACTION_VIEW);
-                        share_intent.setData(Uri.parse("https://api.whatsapp.com/send?phone="+"+91"+model.getPhone()+"&text="+trainer_details));
+                        share_intent.setData(Uri.parse("https://api.whatsapp.com/send?phone="+"&text="+trainer_details));
                         startActivity(share_intent);
                     }
                 });

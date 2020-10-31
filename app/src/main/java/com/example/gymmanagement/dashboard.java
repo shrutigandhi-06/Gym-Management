@@ -54,6 +54,7 @@ public class dashboard extends AppCompatActivity {
                 Intent intent = new Intent(dashboard.this, fragment_main.class);
                 String i = "client";
                 intent.putExtra("flag", i);
+                finish();
                 startActivity(intent);
             }
         });
@@ -65,6 +66,7 @@ public class dashboard extends AppCompatActivity {
                 Intent intent = new Intent(dashboard.this, fragment_main.class);
                 String i = "trainer";
                 intent.putExtra("flag", i);
+                finish();
                 startActivity(intent);
             }
         });
@@ -75,6 +77,15 @@ public class dashboard extends AppCompatActivity {
             public void onClick(View view) {
                 finish();
                 startActivity(new Intent(dashboard.this, membership_expiry.class));
+            }
+        });
+
+        my_account_card = findViewById(R.id.my_account_card);
+        my_account_card.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+                startActivity(new Intent(dashboard.this, my_account.class));
             }
         });
 
