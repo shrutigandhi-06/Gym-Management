@@ -105,6 +105,13 @@ public class set_profile extends AppCompatActivity {
             set_phone.requestFocus();
             return;
         }
+        if(phone.length()<10)
+        {
+            progressBar.setVisibility(View.GONE);
+            set_phone.setError("Invalid phone number");
+            set_phone.requestFocus();
+            return;
+        }
 
         //setting up account
 

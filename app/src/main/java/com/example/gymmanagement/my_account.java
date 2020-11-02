@@ -190,10 +190,25 @@ public class my_account extends AppCompatActivity {
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if(task.isSuccessful())
                 {
-                    for(QueryDocumentSnapshot documentSnapshot:task.getResult())
+                    for(final QueryDocumentSnapshot documentSnapshot:task.getResult())
                     {
                         documentSnapshot.getData();
-                        String name = documentSnapshot.get("name")+"";
+                        final String name = documentSnapshot.get("name")+"";
+                        firebaseFirestore.collection(mAuth.getUid()).document("user info").collection("clients").document(name).collection("sessions").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                if(task.isSuccessful())
+                                {
+                                    for(QueryDocumentSnapshot documentSnapshot1 : task.getResult())
+                                    {
+                                        documentSnapshot1.getData();
+                                        String c_name = name;
+                                        String time = documentSnapshot1.get("arrival_time")+"";
+                                        firebaseFirestore.collection(mAuth.getUid()).document("user info").collection("clients").document(c_name).collection("sessions").document(time).delete();
+                                    }
+                                }
+                            }
+                        });
                         firebaseFirestore.collection(mAuth.getUid()).document("user info").collection("clients").document(name).delete();
                     }
                     Log.d("TAG", "clients deleted");
@@ -212,7 +227,22 @@ public class my_account extends AppCompatActivity {
                                 for(QueryDocumentSnapshot documentSnapshot:task.getResult())
                                 {
                                     documentSnapshot.getData();
-                                    String name = documentSnapshot.get("name")+"";
+                                    final String name = documentSnapshot.get("name")+"";
+                                    firebaseFirestore.collection(mAuth.getUid()).document("user info").collection("trainers").document(name).collection("sessions").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                            if(task.isSuccessful())
+                                            {
+                                                for(QueryDocumentSnapshot documentSnapshot1 : task.getResult())
+                                                {
+                                                    documentSnapshot1.getData();
+                                                    String t_name = name;
+                                                    String time = documentSnapshot1.get("t_arrival_time")+"";
+                                                    firebaseFirestore.collection(mAuth.getUid()).document("user info").collection("trainers").document(t_name).collection("sessions").document(time).delete();
+                                                }
+                                            }
+                                        }
+                                    });
                                     firebaseFirestore.collection(mAuth.getUid()).document("user info").collection("trainers").document(name).delete();
                                 }
                                 Log.d("TAG", "trainers deleted");
