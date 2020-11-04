@@ -20,7 +20,7 @@ public class app_intro extends AppIntro {
         addSlide(AppIntroFragment.newInstance("Welcome to Gymster","Helping hand for Gym Owners",R.drawable.app_logo_full_final,
                 Color.rgb(44,145,253),Color.WHITE, Color.WHITE));
 
-        addSlide(AppIntroFragment.newInstance("Add your new clients and trainers with a single touch","",R.drawable.final_add,
+        addSlide(AppIntroFragment.newInstance("Add your members easily","Add new clients and trainers with a single touch",R.drawable.final_add,
                 Color.rgb(44,145,253),Color.WHITE, Color.WHITE));
 
         addSlide(AppIntroFragment.newInstance("Quickly add client's workouts","Keep track of your clients and trainers workout sessions via Session Info ",
