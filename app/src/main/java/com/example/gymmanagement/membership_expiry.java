@@ -7,10 +7,10 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.DownloadManager;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -20,21 +20,15 @@ import android.widget.TextView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
-
-import static java.lang.Math.abs;
 
 public class membership_expiry extends AppCompatActivity {
 
@@ -50,10 +44,14 @@ public class membership_expiry extends AppCompatActivity {
     Date due_date = null;
     long days_remaining;
 
+    SmsManager smsManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_membership_expiry);
+
+        smsManager = SmsManager.getDefault();
 
         toolbar = findViewById(R.id.expiry_toolbar);
         setSupportActionBar(toolbar);
@@ -110,19 +108,25 @@ public class membership_expiry extends AppCompatActivity {
                     if(days_remaining>0)
                     {
                         if(days_remaining==1)
+                        {
                             holder.plan_expiring.setText("Plan expiring tomorrow");
+                            smsManager.sendTextMessage(model.getPhone(),null, "Oops! Your membership @GYMSTER is going to expire. Only "+days_remaining+" day left.",null,null);
+
+                        }
                         else
                             holder.plan_expiring.setText("Plan expiring in "+(days_remaining+1)+" days");
                     }
                     else if (days_remaining==0)
+                    {
                         holder.plan_expiring.setText("Plan expiring today");
+                        smsManager.sendTextMessage(model.getPhone(),null, "Oops! Your membership @GYMSTER is expiring today",null,null);
+                    }
                     else
                     {
                         holder.plan_expiring.setText("Plan expired");
                         holder.plan_expiring.setTextColor(Color.RED);
+                        smsManager.sendTextMessage(model.getPhone(),null, "Your membership @GYMSTER has been expired.",null,null);
                     }
-
-
                 }
                 else
                     holder.cardView.setVisibility(View.GONE);
@@ -146,8 +150,7 @@ public class membership_expiry extends AppCompatActivity {
         }
     }
 
-    public long diff_in_days(Date d1, Date d2)
-    {
+    public long diff_in_days(Date d1, Date d2) {
 
         long difference_In_Time = d1.getTime() - d2.getTime();
         long difference_In_Days = (difference_In_Time/(1000 * 60 * 60 * 24))%365;
@@ -178,5 +181,9 @@ public class membership_expiry extends AppCompatActivity {
         finish();
         startActivity(new Intent(membership_expiry.this, dashboard.class));
         return super.onOptionsItemSelected(item);
+    }
+
+    public void temp(){
+
     }
 }

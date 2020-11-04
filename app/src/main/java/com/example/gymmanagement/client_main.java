@@ -46,6 +46,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.mikhaellopez.circularimageview.CircularImageView;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.RequestCreator;
 
 import java.util.ArrayList;
 
@@ -74,6 +75,7 @@ public class client_main extends Fragment {
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         ll = (LinearLayout) inflater.inflate(R.layout.activity_client_main, container, false);
+
 
         client_recyclerView = ll.findViewById(R.id.client_recycler_view);
         firebaseFirestore = FirebaseFirestore.getInstance();
@@ -133,7 +135,8 @@ public class client_main extends Fragment {
                 c_cnt=adapter.getItemCount();
                 Log.d("TAG",c_cnt+"");
 
-                Picasso.get().load(model.getUri()).into(holder.imageView);
+                RequestCreator picasso = Picasso.get().load(model.getUri());
+                picasso.into(holder.imageView);
 
                 holder.name.setText(model.getName().toUpperCase());
                 holder.phone.setText(model.getPhone());
@@ -457,7 +460,8 @@ public class client_main extends Fragment {
                 s_c_cnt=adapter.getItemCount();
                 Log.d("TAG",s_c_cnt+"");
 
-                Picasso.get().load(model.getUri()).into(holder.imageView);
+                RequestCreator s_picasso = Picasso.get().load(model.getUri());
+                s_picasso.into(holder.imageView);
 
                 holder.name.setText(model.getName().toUpperCase());
                 holder.phone.setText(model.getPhone());

@@ -5,6 +5,9 @@
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.SEND_SMS"/>
+    <uses-permission android:name="android.permission.READ_SMS"/>
+    <uses-permission android:name="android.permission.RECEIVE_SMS"/>
 
     <application
         android:allowBackup="true"
@@ -28,7 +31,6 @@
         <activity android:name=".add_trainer" />
         <activity android:name=".trainer_main" />
         <activity android:name=".after_login" />
-        <activity android:name=".reset_password" />
         <activity android:name=".set_profile" />
         <activity android:name=".signUp" />
         <activity android:name=".MainActivity">

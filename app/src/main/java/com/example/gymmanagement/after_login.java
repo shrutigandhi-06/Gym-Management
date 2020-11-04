@@ -16,7 +16,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -47,22 +46,21 @@ public class after_login extends Fragment {
 
     String userID;
     String client, trainer_attended;
-    String no_total_clients;
 
     ArrayList<String> clients, trainers;
 
     Spinner client_spinner, trainer_spinner;
 
     Button save_record;
-    TextView total_clients;
-    ProgressBar progress_client;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         RelativeLayout rl = (RelativeLayout)inflater.inflate(R.layout.activity_after_login, container, false);
 
-        ActivityCompat.requestPermissions(getActivity(),new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, PackageManager.PERMISSION_GRANTED);
+        ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, PackageManager.PERMISSION_GRANTED);
+        ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.SEND_SMS, Manifest.permission.READ_SMS}, PackageManager.PERMISSION_GRANTED);
+
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
         firebaseFirestore = FirebaseFirestore.getInstance();

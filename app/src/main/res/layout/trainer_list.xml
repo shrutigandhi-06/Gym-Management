@@ -21,22 +21,38 @@
                 android:id="@+id/txt_trainer_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
+                android:layout_marginLeft="100dp"
                 android:layout_marginTop="27dp"
                 android:text="Name"
-                android:layout_toRightOf="@id/trainer_profile_pic"
                 android:textStyle="bold"
                 android:textSize="15sp"/>
 
-            <com.mikhaellopez.circularimageview.CircularImageView
-                android:id="@+id/trainer_profile_pic"
-                android:layout_width="75dp"
-                android:layout_height="75dp"
-                android:layout_alignParentLeft="true"
-                android:layout_marginRight="10dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"
-                android:src="@drawable/default_photo"/>
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <ProgressBar
+                    android:id="@+id/t_DP_progress_bar"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:visibility="visible"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="@+id/trainer_profile_pic"
+                    app:layout_constraintStart_toStartOf="@+id/trainer_profile_pic"
+                    app:layout_constraintTop_toTopOf="@+id/trainer_profile_pic" />
+
+                <com.mikhaellopez.circularimageview.CircularImageView
+                    android:id="@+id/trainer_profile_pic"
+                    android:layout_width="75dp"
+                    android:layout_height="75dp"
+                    android:layout_alignParentLeft="true"
+                    android:src="@drawable/default_photo"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <ImageView
                 android:id="@+id/icon_t_share"

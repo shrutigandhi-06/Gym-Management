@@ -164,6 +164,11 @@ public class add_client extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
                 client_plan = adapterView.getItemAtPosition(position).toString();
+                if(!(edt_join_date.getText().toString().isEmpty()))
+                {
+                    edt_join_date.setText("");
+                    edt_due_date.setText("");
+                }
             }
 
             @Override
@@ -173,9 +178,6 @@ public class add_client extends AppCompatActivity {
         client_save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               /* Intent intent = new Intent(Intent.ACTION_SEND);
-                intent.setData(Uri.parse("https://api.whatsapp.com/send?phone="+"+91"+edt_phone.getText().toString().trim()+"&text="+"hello"));
-                startActivity(intent);*/
                 addClient();
             }
         });

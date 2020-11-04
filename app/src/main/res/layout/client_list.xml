@@ -79,15 +79,32 @@
                 android:text="Email:"
                 android:textStyle="bold" />
 
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
 
-            <com.mikhaellopez.circularimageview.CircularImageView
-                android:id="@+id/card_client_DP"
-                android:layout_width="75dp"
-                android:layout_height="75dp"
-                android:layout_gravity="left"
-                android:layout_marginLeft="7dp"
-                android:layout_marginTop="4dp"
-                android:src="@drawable/default_photo" />
+                <ProgressBar
+                    android:id="@+id/c_DP_progress_bar"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:visibility="visible"
+                    app:layout_constraintBottom_toBottomOf="@+id/card_client_DP"
+                    app:layout_constraintEnd_toEndOf="@+id/card_client_DP"
+                    app:layout_constraintStart_toStartOf="@+id/card_client_DP"
+                    app:layout_constraintTop_toTopOf="@+id/card_client_DP" />
+
+                <com.mikhaellopez.circularimageview.CircularImageView
+                    android:id="@+id/card_client_DP"
+                    android:layout_width="75dp"
+                    android:layout_height="75dp"
+                    android:layout_gravity="left"
+                    android:src="@drawable/default_photo"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <ImageView
                 android:id="@+id/icon_share"

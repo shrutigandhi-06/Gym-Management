@@ -64,6 +64,7 @@
                 <EditText
                     android:id="@+id/user_name"
                     android:layout_width="match_parent"
+                    android:inputType="text"
                     android:layout_height="wrap_content"
                     android:enabled="false"/>
             </com.google.android.material.textfield.TextInputLayout>
@@ -79,6 +80,8 @@
                     android:id="@+id/user_phone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:inputType="phone"
+                    android:maxLength="10"
                     android:enabled="false"/>
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -93,6 +96,7 @@
                     android:id="@+id/user_email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:inputType="textEmailAddress"
                     android:enabled="false"/>
             </com.google.android.material.textfield.TextInputLayout>
 

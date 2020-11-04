@@ -10,6 +10,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -27,7 +28,6 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -141,6 +141,37 @@ public class my_account extends AppCompatActivity {
                 u_name = user_name.getText().toString();
                 u_phone = user_phone.getText().toString();
                 u_email = user_email.getText().toString();
+                if(user_name.getText().toString().isEmpty())
+                {
+                  user_name.setError("Please enter name");
+                  user_name.requestFocus();
+                  return;
+                }
+                if(user_phone.getText().toString().isEmpty())
+                {
+                    user_phone.setError("Please enter phone number");
+                    user_phone.requestFocus();
+                    return;
+                }
+                if(user_phone.getText().toString().length() < 10)
+                {
+                    user_phone.setError("Invalid phone number");
+                    user_phone.requestFocus();
+                    return;
+                }
+                if(user_email.getText().toString().isEmpty())
+                {
+                    user_email.setError("Please enter email address");
+                    user_email.requestFocus();
+                    return;
+                }
+                if(!Patterns.EMAIL_ADDRESS.matcher(user_email.getText().toString().trim()).matches())
+                {
+                    user_email.setError("Invalid email address");
+                    user_email.requestFocus();
+                    return;
+                }
+
                 HashMap<String, Object> update_info = new HashMap<>();
                 update_info.put("name", u_name);
                 update_info.put("phone", u_phone);
@@ -254,7 +285,15 @@ public class my_account extends AppCompatActivity {
                             if (task.isSuccessful())
                             {
                                 firebaseFirestore.collection(mAuth.getUid()).document("user info").delete();
-                                mAuth.getCurrentUser().delete();
+                                mAuth.getCurrentUser().delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if(task.isSuccessful())
+                                            Log.d("delete", "User deleted from auth");
+                                        else
+                                            Log.d("delete", "User not deleted from auth");
+                                    }
+                                });
                                 //mAuth.signOut();
                                 Log.d("TAG","User deleted");
                                 finish();
@@ -266,7 +305,6 @@ public class my_account extends AppCompatActivity {
             }
         });
     }
-
     @Override
     public void onBackPressed() {
 
