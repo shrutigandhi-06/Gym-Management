@@ -95,7 +95,7 @@ public class membership_expiry extends AppCompatActivity {
 
                     Calendar calendar1 = Calendar.getInstance();
                     Date curr_date = calendar1.getTime();
-                    days_remaining = diff_in_days(due_date, curr_date);
+                    days_remaining = diff_in_days(due_date, curr_date)+1;
                 }
                 catch (ParseException e)
                 {
@@ -114,7 +114,7 @@ public class membership_expiry extends AppCompatActivity {
 
                         }
                         else
-                            holder.plan_expiring.setText("Plan expiring in "+(days_remaining+1)+" days");
+                            holder.plan_expiring.setText("Plan expiring in "+(days_remaining)+" days");
                     }
                     else if (days_remaining==0)
                     {
@@ -183,7 +183,4 @@ public class membership_expiry extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void temp(){
-
-    }
 }

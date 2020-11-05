@@ -31,7 +31,6 @@ public class app_intro extends AppIntro {
 
         addSlide(AppIntroFragment.newInstance("Let's get started!", "",
                 R.drawable.app_logo_full_final,Color.rgb(44,145,253),Color.WHITE, Color.WHITE));
-
     }
 
     @Override
