@@ -288,7 +288,7 @@ public class add_client extends AppCompatActivity {
         client_save.setEnabled(false);
         client_save.setAlpha(0.5f);
 
-        final StorageReference profile_imageREF = FirebaseStorage.getInstance().getReference("profilePics/clients_DP/"+System.currentTimeMillis()+".jpg");
+        final StorageReference profile_imageREF = FirebaseStorage.getInstance().getReference("profilePics/"+mAuth.getUid()+"/clients_DP/"+System.currentTimeMillis()+".jpg");
         if(uriProfile_image!=null)
         {
             profile_imageREF.putFile(uriProfile_image).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -434,16 +434,7 @@ public class add_client extends AppCompatActivity {
         if(profile_imageURL!=null)
         {
             UserProfileChangeRequest profile = new UserProfileChangeRequest.Builder().setPhotoUri(Uri.parse(profile_imageURL)).build();
-            firebaseUser.updateProfile(profile).addOnCompleteListener(new OnCompleteListener<Void>() {
-                @Override
-                public void onComplete(@NonNull Task<Void> task) {
-                    if(task.isSuccessful())
-                    {
-                        Toast toast = Toast.makeText(add_client.this, "You're good to go!!!",Toast.LENGTH_SHORT);
-                        toast.show();
-                    }
-                }
-            });
+            firebaseUser.updateProfile(profile);
         }
 
         DocumentReference documentReference = firebaseFirestore.collection(userID).document("user info").collection("clients").document(c_name.trim());
@@ -457,6 +448,9 @@ public class add_client extends AppCompatActivity {
         save_client.put("email", c_email);
         save_client.put("join_date", c_join_date);
         save_client.put("due_date", c_due_date);
+        save_client.put("expiring_today", "false");
+        save_client.put("expiring_tomorrow", "false");
+        save_client.put("expired", "false");
         if(profile_imageURL!=null)
             save_client.put("uri", profile_imageURL);
         else
@@ -607,5 +601,4 @@ public class add_client extends AppCompatActivity {
 
         return date2;
     }
-
 }

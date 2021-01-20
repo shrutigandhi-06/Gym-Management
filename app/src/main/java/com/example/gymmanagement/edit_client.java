@@ -192,7 +192,7 @@ public class edit_client extends AppCompatActivity {
         DP_progressbar.setVisibility(View.VISIBLE);
         save_changes.setEnabled(false);
         save_changes.setAlpha(.5f);
-        final StorageReference profile_imageREF = FirebaseStorage.getInstance().getReference("profilePics/clients_DP/"+System.currentTimeMillis()+".jpg");
+        final StorageReference profile_imageREF = FirebaseStorage.getInstance().getReference("profilePics/"+mAuth.getUid()+"/clients_DP/"+System.currentTimeMillis()+".jpg");
         if(uriProfile_image!=null)
         {
             profile_imageREF.putFile(uriProfile_image).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -275,16 +275,7 @@ public class edit_client extends AppCompatActivity {
         if(profile_imageURL!=null)
         {
             UserProfileChangeRequest profile = new UserProfileChangeRequest.Builder().setPhotoUri(Uri.parse(profile_imageURL)).build();
-            firebaseUser.updateProfile(profile).addOnCompleteListener(new OnCompleteListener<Void>() {
-                @Override
-                public void onComplete(@NonNull Task<Void> task) {
-                    if(task.isSuccessful())
-                    {
-                        Toast toast = Toast.makeText(edit_client.this, "You're good to go!!!",Toast.LENGTH_SHORT);
-                        toast.show();
-                    }
-                }
-            });
+            firebaseUser.updateProfile(profile);
         }
 
         String userID = mAuth.getUid();

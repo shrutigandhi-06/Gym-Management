@@ -181,7 +181,7 @@ public class add_trainer extends AppCompatActivity {
         trainer_add.setEnabled(false);
         trainer_add.setAlpha(0.5f);
 
-        final StorageReference profile_imageREF = FirebaseStorage.getInstance().getReference("profilePics/trainers_DP/"+System.currentTimeMillis()+".jpg");
+        final StorageReference profile_imageREF = FirebaseStorage.getInstance().getReference("profilePics/"+mAuth.getUid()+"/trainers_DP/"+System.currentTimeMillis()+".jpg");
         if(uriProfile_image!=null)
         {
             profile_imageREF.putFile(uriProfile_image).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -304,16 +304,7 @@ public class add_trainer extends AppCompatActivity {
         {
 
             UserProfileChangeRequest profile = new UserProfileChangeRequest.Builder().setPhotoUri(Uri.parse(profile_imageURL)).build();
-            firebaseUser.updateProfile(profile).addOnCompleteListener(new OnCompleteListener<Void>() {
-                @Override
-                public void onComplete(@NonNull Task<Void> task) {
-                    if(task.isSuccessful())
-                    {
-                        Toast toast = Toast.makeText(add_trainer.this, "You're good to go!!!",Toast.LENGTH_SHORT);
-                        toast.show();
-                    }
-                }
-            });
+            firebaseUser.updateProfile(profile);
         }
 
         String userID = mAuth.getUid();

@@ -60,7 +60,7 @@ public class client_main extends Fragment {
     RecyclerView client_recyclerView;
     FirebaseFirestore firebaseFirestore;
     FirebaseAuth mAuth;
-    FirestoreRecyclerAdapter adapter;
+    FirestoreRecyclerAdapter adapter, s_adapter;
     String userID;
     static int c_cnt=0, s_c_cnt = 0;
 
@@ -75,7 +75,6 @@ public class client_main extends Fragment {
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         ll = (LinearLayout) inflater.inflate(R.layout.activity_client_main, container, false);
-
 
         client_recyclerView = ll.findViewById(R.id.client_recycler_view);
         firebaseFirestore = FirebaseFirestore.getInstance();
@@ -183,6 +182,7 @@ public class client_main extends Fragment {
 
                             c_cnt--;
                             flag = 0;
+
                             firebaseFirestore.collection(mAuth.getUid()).document("user info").collection("clients").document(model.getName().toLowerCase()).delete();
 
                             Log.d("TAG", "user deleted");
@@ -217,6 +217,22 @@ public class client_main extends Fragment {
                                 public void run() {
                                     if(flag == 0)
                                     {
+                                        firebaseFirestore.collection(mAuth.getUid()).document("user info").collection("clients").document(model.getName()).collection("sessions").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                if(task.isSuccessful())
+                                                {
+                                                    for(QueryDocumentSnapshot documentSnapshot1 : task.getResult())
+                                                    {
+                                                        documentSnapshot1.getData();
+                                                        String time = documentSnapshot1.get("arrival_time")+"";
+                                                        firebaseFirestore.collection(mAuth.getUid()).document("user info").collection("clients").document(model.getName()).collection("sessions").document(time).delete();
+                                                    }
+                                                    Log.d("TAG", "sessions deleted");
+                                                }
+                                            }
+                                        });
+
                                         StorageReference profile_imageREF = FirebaseStorage.getInstance().getReferenceFromUrl(model.getUri());
                                         if(!(model.getUri().equals("https://firebasestorage.googleapis.com/v0/b/gym-management-d98ff.appspot.com/o/profilePics%2Fdefault_photo.png?alt=media&token=4ebef1e3-55cc-47e4-acf9-3bb027c6b90c")))
                                         {
@@ -384,6 +400,7 @@ public class client_main extends Fragment {
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
 
+        client_recyclerView.setAdapter(adapter);
         inflater.inflate(R.menu.client_search_view, menu);
         MenuItem menuItem = menu.findItem(R.id.client_bar);
         SearchView searchView = (SearchView)menuItem.getActionView();
@@ -439,11 +456,10 @@ public class client_main extends Fragment {
 
         }
 
+        Query s_query = firebaseFirestore.collection(userID).document("user info").collection("clients");
+        FirestoreRecyclerOptions<client_list> options = new FirestoreRecyclerOptions.Builder<client_list>().setQuery(s_query.orderBy("name").startAt(s.toLowerCase()).endAt(s.toLowerCase()+"\uf8ff"), client_list.class).build();
 
-        Query query = firebaseFirestore.collection(userID).document("user info").collection("clients");
-        FirestoreRecyclerOptions<client_list> options = new FirestoreRecyclerOptions.Builder<client_list>().setQuery(query.orderBy("name").startAt(s.toLowerCase()).endAt(s.toLowerCase()+"\uf8ff"), client_list.class).build();
-
-        adapter = new FirestoreRecyclerAdapter<client_list, clientViewHolder>(options) {
+        s_adapter = new FirestoreRecyclerAdapter<client_list, clientViewHolder>(options) {
             @NonNull
             @Override
             public clientViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -457,7 +473,7 @@ public class client_main extends Fragment {
             @Override
             protected void onBindViewHolder(@NonNull final clientViewHolder holder, int position, @NonNull final client_list model) {
 
-                s_c_cnt=adapter.getItemCount();
+                s_c_cnt = adapter.getItemCount();
                 Log.d("TAG",s_c_cnt+"");
 
                 RequestCreator s_picasso = Picasso.get().load(model.getUri());
@@ -542,6 +558,21 @@ public class client_main extends Fragment {
                                     public void run() {
                                         if(flag == 0)
                                         {
+                                            firebaseFirestore.collection(mAuth.getUid()).document("user info").collection("clients").document(model.getName()).collection("sessions").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                    if(task.isSuccessful())
+                                                    {
+                                                        for(QueryDocumentSnapshot documentSnapshot1 : task.getResult())
+                                                        {
+                                                            documentSnapshot1.getData();
+                                                            String time = documentSnapshot1.get("arrival_time")+"";
+                                                            firebaseFirestore.collection(mAuth.getUid()).document("user info").collection("clients").document(model.getName()).collection("sessions").document(time).delete();
+                                                        }
+                                                        Log.d("TAG", "sessions deleted");
+                                                    }
+                                                }
+                                            });
                                             StorageReference profile_imageREF = FirebaseStorage.getInstance().getReferenceFromUrl(model.getUri());
                                             if(!(model.getUri().equals("https://firebasestorage.googleapis.com/v0/b/gym-management-d98ff.appspot.com/o/profilePics%2Fdefault_photo.png?alt=media&token=4ebef1e3-55cc-47e4-acf9-3bb027c6b90c")))
                                             {
@@ -636,8 +667,8 @@ public class client_main extends Fragment {
             }
         };
 
-        adapter.startListening();
+        s_adapter.startListening();
         client_recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        client_recyclerView.setAdapter(adapter);
+        client_recyclerView.setAdapter(s_adapter);
     }
 }

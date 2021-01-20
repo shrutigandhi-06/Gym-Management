@@ -3,10 +3,13 @@ package com.example.gymmanagement;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -148,18 +151,17 @@ public class session_info extends AppCompatActivity {
         }
         catch (Exception e)
         {
+            sessions_information.clear();
             Toast.makeText(this,"This is Error msg : " +e.getMessage(), Toast.LENGTH_LONG).show();
         }
-
     }
 
     private class sessionViewHolder extends RecyclerView.ViewHolder{
 
-        TextView Sr_no, trainer_attended, date, time;
+        TextView trainer_attended, date, time;
         public sessionViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            //Sr_no = itemView.findViewById(R.id.sr_no);
             trainer_attended = itemView.findViewById(R.id.trainer_attended);
             date = itemView.findViewById(R.id.date);
             time = itemView.findViewById(R.id.time);
@@ -168,7 +170,7 @@ public class session_info extends AppCompatActivity {
 
     public void adapter_class() {
         Log.d("TAG", selected_client);
-        Query query = firebaseFirestore.collection(mAuth.getUid()).document("user info").collection("clients").document(selected_client).collection("sessions").orderBy("date", Query.Direction.DESCENDING);
+        Query query = firebaseFirestore.collection(mAuth.getUid()).document("user info").collection("clients").document(selected_client).collection("sessions").orderBy("year", Query.Direction.DESCENDING);
 
         FirestoreRecyclerOptions<sessions_getter_setter> options = new FirestoreRecyclerOptions.Builder<sessions_getter_setter>().setQuery(query, sessions_getter_setter.class).build();
 
@@ -185,7 +187,6 @@ public class session_info extends AppCompatActivity {
                 String per_session = model.getDate() + "         " + model.getArrival_time() + "         " + model.getTrainer_attended()+"\n";
                 sessions_information.add(per_session);
                 Log.d("TAG", "position");
-                //holder.Sr_no.setText(position+1+"");
                 holder.date.setText(model.getDate());
                 holder.time.setText(model.getArrival_time());
                 holder.trainer_attended.setText(model.getTrainer_attended());
@@ -222,12 +223,21 @@ public class session_info extends AppCompatActivity {
         int id = item.getItemId();
         if(id == R.id.download_session_info)
         {
-            adapter_class();
-            savePDF();
-            Log.d("sessions", sessions_information.toString());
-            sessions_information.clear();
-            Log.d("sessions", sessions_information.toString()+"removed all "+cnt);
-            cnt = 0;
+            String permission = android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
+            int res = getApplicationContext().checkCallingOrSelfPermission(permission);
+            if(res == PackageManager.PERMISSION_GRANTED)
+            {
+                adapter_class();
+                savePDF();
+                Log.d("sessions", sessions_information.toString());
+                sessions_information.clear();
+                Log.d("sessions", sessions_information.toString()+"removed all "+cnt);
+                cnt = 0;
+            }
+            else
+            {
+                ActivityCompat.requestPermissions(session_info.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, PackageManager.PERMISSION_GRANTED);
+            }
         }
         else
         {

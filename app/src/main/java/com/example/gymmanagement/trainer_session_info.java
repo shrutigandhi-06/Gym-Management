@@ -3,10 +3,13 @@ package com.example.gymmanagement;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -115,7 +118,6 @@ public class trainer_session_info extends AppCompatActivity {
 
             }
         });
-
     }
 
     private void savePDF() {
@@ -144,6 +146,7 @@ public class trainer_session_info extends AppCompatActivity {
         }
         catch (Exception e)
         {
+            t_session_information.clear();
             Toast.makeText(this,"This is Error msg : " +e.getMessage(), Toast.LENGTH_LONG).show();
         }
     }
@@ -162,7 +165,7 @@ public class trainer_session_info extends AppCompatActivity {
     }
 
     public void t_adapter_class() {
-        Query query = firebaseFirestore.collection(mAuth.getUid()).document("user info").collection("trainers").document(selected_trainer).collection("sessions").orderBy("t_arrival_date", Query.Direction.DESCENDING);
+        Query query = firebaseFirestore.collection(mAuth.getUid()).document("user info").collection("trainers").document(selected_trainer).collection("sessions").orderBy("year", Query.Direction.DESCENDING);
 
         FirestoreRecyclerOptions<trainer_sessions_getter_setter> options = new FirestoreRecyclerOptions.Builder<trainer_sessions_getter_setter>().setQuery(query, trainer_sessions_getter_setter.class).build();
 
@@ -221,12 +224,21 @@ public class trainer_session_info extends AppCompatActivity {
         int id = item.getItemId();
         if(id == R.id.download_session_info)
         {
-            t_adapter_class();
-            savePDF();
-            Log.d("sessions", t_session_information.toString());
-            t_session_information.clear();
-            Log.d("sessions", t_session_information.toString()+"removed all "+cnt);
-            cnt = 0;
+            String permission = android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
+            int res = getApplicationContext().checkCallingOrSelfPermission(permission);
+            if(res == PackageManager.PERMISSION_GRANTED)
+            {
+                t_adapter_class();
+                savePDF();
+                Log.d("sessions", t_session_information.toString());
+                t_session_information.clear();
+                Log.d("sessions", t_session_information.toString()+"removed all "+cnt);
+                cnt = 0;
+            }
+            else
+            {
+                ActivityCompat.requestPermissions(trainer_session_info.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, PackageManager.PERMISSION_GRANTED);
+            }
         }
         else
         {

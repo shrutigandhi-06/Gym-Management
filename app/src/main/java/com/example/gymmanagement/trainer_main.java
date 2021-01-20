@@ -58,7 +58,7 @@ public class trainer_main extends Fragment {
     LinearLayout ll;
 
     FirebaseFirestore firebaseFirestore;
-    FirestoreRecyclerAdapter adapter;
+    FirestoreRecyclerAdapter adapter, s_adapter;
     FirebaseAuth mAuth;
     RecyclerView recyclerView;
     FloatingActionButton add;
@@ -181,7 +181,7 @@ public class trainer_main extends Fragment {
 
                                 Log.d("TAG", "user deleted");
 
-                                Snackbar.make(getActivity().findViewById(android.R.id.content), "Client deleted", Snackbar.LENGTH_LONG)
+                                Snackbar.make(getActivity().findViewById(android.R.id.content), "Trainer deleted", Snackbar.LENGTH_LONG)
                                     .setAction("undo", new View.OnClickListener() {
                                         @Override
                                         public void onClick(View view) {
@@ -211,6 +211,21 @@ public class trainer_main extends Fragment {
                                     public void run() {
                                         if(flag == 0)
                                         {
+                                            firebaseFirestore.collection(mAuth.getUid()).document("user info").collection("trainers").document(model.getName()).collection("sessions").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                    if(task.isSuccessful())
+                                                    {
+                                                        for(QueryDocumentSnapshot documentSnapshot1 : task.getResult())
+                                                        {
+                                                            documentSnapshot1.getData();
+                                                            String time = documentSnapshot1.get("t_arrival_time")+"";
+                                                            firebaseFirestore.collection(mAuth.getUid()).document("user info").collection("trainers").document(model.getName()).collection("sessions").document(time).delete();
+                                                        }
+                                                        Log.d("TAG", "sessions deleted");
+                                                    }
+                                                }
+                                            });
                                             StorageReference profile_imageREF = FirebaseStorage.getInstance().getReferenceFromUrl(model.getUri());
                                             if(!(model.getUri().equals("https://firebasestorage.googleapis.com/v0/b/gym-management-d98ff.appspot.com/o/profilePics%2Fdefault_photo.png?alt=media&token=4ebef1e3-55cc-47e4-acf9-3bb027c6b90c")))
                                             {
@@ -366,7 +381,8 @@ public class trainer_main extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 
-       inflater.inflate(R.menu.search_view, menu);
+        recyclerView.setAdapter(adapter);
+        inflater.inflate(R.menu.search_view, menu);
         MenuItem menuItem = menu.findItem(R.id.bar);
         SearchView searchView = (SearchView)menuItem.getActionView();
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -423,9 +439,9 @@ public class trainer_main extends Fragment {
             }
         }
 
-        Query query = firebaseFirestore.collection(mAuth.getUid()).document("user info").collection("trainers");
-        FirestoreRecyclerOptions<trainer_list> options = new FirestoreRecyclerOptions.Builder<trainer_list>().setQuery(query.orderBy("name").startAt(s.toLowerCase()).endAt(s.toLowerCase()+"\uf8ff"), trainer_list.class).build();
-        adapter = new FirestoreRecyclerAdapter<trainer_list, trainerViewHolder>(options) {
+        Query s_query = firebaseFirestore.collection(mAuth.getUid()).document("user info").collection("trainers");
+        FirestoreRecyclerOptions<trainer_list> options = new FirestoreRecyclerOptions.Builder<trainer_list>().setQuery(s_query.orderBy("name").startAt(s.toLowerCase()).endAt(s.toLowerCase()+"\uf8ff"), trainer_list.class).build();
+        s_adapter = new FirestoreRecyclerAdapter<trainer_list, trainerViewHolder>(options) {
             @NonNull
             @Override
             public trainerViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -489,7 +505,7 @@ public class trainer_main extends Fragment {
 
                                 Log.d("TAG", "user deleted");
 
-                                Snackbar.make(getActivity().findViewById(android.R.id.content), "Client deleted", Snackbar.LENGTH_LONG)
+                                Snackbar.make(getActivity().findViewById(android.R.id.content), "Trainer deleted", Snackbar.LENGTH_LONG)
                                         .setAction("undo", new View.OnClickListener() {
                                             @Override
                                             public void onClick(View view) {
@@ -519,6 +535,21 @@ public class trainer_main extends Fragment {
                                     public void run() {
                                         if(flag == 0)
                                         {
+                                            firebaseFirestore.collection(mAuth.getUid()).document("user info").collection("trainers").document(model.getName()).collection("sessions").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                    if(task.isSuccessful())
+                                                    {
+                                                        for(QueryDocumentSnapshot documentSnapshot1 : task.getResult())
+                                                        {
+                                                            documentSnapshot1.getData();
+                                                            String time = documentSnapshot1.get("t_arrival_time")+"";
+                                                            firebaseFirestore.collection(mAuth.getUid()).document("user info").collection("trainers").document(model.getName()).collection("sessions").document(time).delete();
+                                                        }
+                                                        Log.d("TAG", "sessions deleted");
+                                                    }
+                                                }
+                                            });
                                             StorageReference profile_imageREF = FirebaseStorage.getInstance().getReferenceFromUrl(model.getUri());
                                             if(!(model.getUri().equals("https://firebasestorage.googleapis.com/v0/b/gym-management-d98ff.appspot.com/o/profilePics%2Fdefault_photo.png?alt=media&token=4ebef1e3-55cc-47e4-acf9-3bb027c6b90c")))
                                             {
@@ -604,8 +635,8 @@ public class trainer_main extends Fragment {
             }
         };
 
-        adapter.startListening();
+        s_adapter.startListening();
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setAdapter(adapter);
+        recyclerView.setAdapter(s_adapter);
     }
 }

@@ -147,7 +147,7 @@ public class edit_trainer extends AppCompatActivity {
         edt_t_progressbar.setVisibility(View.VISIBLE);
         trainer_upgrade.setEnabled(false);
         trainer_upgrade.setAlpha(.5f);
-        final StorageReference profile_imageREF = FirebaseStorage.getInstance().getReference("profilePics/trainers_DP/"+System.currentTimeMillis()+".jpg");
+        final StorageReference profile_imageREF = FirebaseStorage.getInstance().getReference("profilePics/"+mAuth.getUid()+"/trainers_DP/"+System.currentTimeMillis()+".jpg");
         if(uriProfile_image!=null)
         {
             profile_imageREF.putFile(uriProfile_image).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -243,16 +243,7 @@ public class edit_trainer extends AppCompatActivity {
         if(profile_imageURL!=null)
         {
             UserProfileChangeRequest profile = new UserProfileChangeRequest.Builder().setPhotoUri(Uri.parse(profile_imageURL)).build();
-            firebaseUser.updateProfile(profile).addOnCompleteListener(new OnCompleteListener<Void>() {
-                @Override
-                public void onComplete(@NonNull Task<Void> task) {
-                    if(task.isSuccessful())
-                    {
-                        Toast toast = Toast.makeText(edit_trainer.this, "You're good to go!!!",Toast.LENGTH_SHORT);
-                        toast.show();
-                    }
-                }
-            });
+            firebaseUser.updateProfile(profile);
         }
 
         DocumentReference documentReference;

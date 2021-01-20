@@ -1,12 +1,9 @@
 package com.example.gymmanagement;
 
-import android.Manifest;
-import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -36,6 +33,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 
 public class after_login extends Fragment {
@@ -58,7 +56,8 @@ public class after_login extends Fragment {
 
         RelativeLayout rl = (RelativeLayout)inflater.inflate(R.layout.activity_after_login, container, false);
 
-        ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.SEND_SMS, Manifest.permission.READ_SMS}, PackageManager.PERMISSION_GRANTED);
+        SimpleDateFormat sdf = new SimpleDateFormat("yy");
+        final String year = sdf.format(Calendar.getInstance().getTime());
 
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
@@ -67,8 +66,6 @@ public class after_login extends Fragment {
         client_spinner = rl.findViewById(R.id.spinner_client_name);
         trainer_spinner = rl.findViewById(R.id.spinner_trainer_attended);
         save_record = rl.findViewById(R.id.btn_record_save);
-        //total_clients = rl.findViewById(R.id.txt_no_total_clients);
-        //progress_client = rl.findViewById(R.id.progress_client);
 
         userID = mAuth.getUid();
 
@@ -153,7 +150,7 @@ public class after_login extends Fragment {
                 Log.d("TAG", "temp");
                 Calendar calendar = Calendar.getInstance();
                 SimpleDateFormat simpleDateFormat= new SimpleDateFormat("dd-MM-yy");
-                String date=simpleDateFormat.format(calendar.getTime());
+                String date = simpleDateFormat.format(calendar.getTime());
                 String time = DateFormat.getTimeInstance().format(calendar.getTime());
 
                 DocumentReference documentReference = firebaseFirestore.collection(userID).document("user info").collection("clients").document(client).collection("sessions").document(time);
@@ -162,6 +159,7 @@ public class after_login extends Fragment {
                 session_data.put("trainer_attended", trainer_attended);
                 session_data.put("arrival_time", time);
                 session_data.put("date", date);
+                session_data.put("year", year);
 
                 documentReference.set(session_data).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -185,9 +183,9 @@ public class after_login extends Fragment {
                 trainer_session_data.put("client_attended", client);
                 trainer_session_data.put("t_arrival_time", time);
                 trainer_session_data.put("t_arrival_date",date);
+                trainer_session_data.put("year", year);
 
                 documentReference1.set(trainer_session_data);
-
             }
             }
         });
